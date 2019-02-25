@@ -1,0 +1,31 @@
+AllCops:
+  TargetRubyVersion: 2.6
+  Exclude:
+    - 'bin/**/*'
+    - 'config/**/*'
+    - 'db/schema.rb'
+
+Metrics/LineLength:
+  Max: 120
+
+Naming/FileName:
+  Exclude:
+    - 'Gemfile'
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/BlockComments:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/MixinUsage:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
