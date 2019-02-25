@@ -15,6 +15,7 @@ gem 'knock'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'dotenv-rails'
   gem 'faker'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
