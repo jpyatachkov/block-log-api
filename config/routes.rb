@@ -6,8 +6,9 @@ Rails.application.routes.draw do
       post 'users/register'
       post 'user_token' => 'user_token#create'
 
-      resources :courses
-      resources :assignments
+      resources :courses do
+        resources :assignments
+      end
     end
   end
 end

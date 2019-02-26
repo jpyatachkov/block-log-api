@@ -5,7 +5,7 @@ module Api
 
       # GET /assignments
       def index
-        @assignments = Assignment.all
+        @assignments = Assignment.all.where course_id: params[:course_id]
         render json: @assignments
       end
 
@@ -19,7 +19,9 @@ module Api
         @assignment = Assignment.new(assignment_params)
 
         if @assignment.save
-          render json: @assignment, status: :created, location: api_v1_assignment_url(@assignment)
+          render json: @assignment,
+                 status: :created,
+                 location: api_v1_course_assignment_url(@assignment.course, @assignment)
         else
           render json: @assignment.errors, status: :bad_request
         end
@@ -46,7 +48,7 @@ module Api
       end
 
       def assignment_params
-        params.require(:assignment).permit(:text, :course_id)
+        params.require(:assignment).permit(:text).merge course_id: params[:course_id]
       end
     end
   end

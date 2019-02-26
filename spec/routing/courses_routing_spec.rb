@@ -10,7 +10,6 @@ RSpec.describe Api::V1::CoursesController, type: :routing do
       expect(get: '/api/v1/courses/1').to route_to('api/v1/courses#show', id: '1')
     end
 
-
     it 'routes to #create' do
       expect(post: '/api/v1/courses').to route_to('api/v1/courses#create')
     end

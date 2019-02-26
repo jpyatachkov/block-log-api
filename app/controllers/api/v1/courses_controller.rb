@@ -21,7 +21,7 @@ module Api
         if @course.save
           render json: @course, status: :created, location: api_v1_course_url(@course)
         else
-          render json: { errors: @course.errors }, status: :unprocessable_entity
+          render json: { errors: @course.errors }, status: :bad_request
         end
       end
 
