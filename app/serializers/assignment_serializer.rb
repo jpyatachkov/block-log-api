@@ -1,4 +1,4 @@
 class AssignmentSerializer < ActiveModel::Serializer
-  attributes :id, :text
+  attributes :id, :text, :tests
   has_one :course
 end

@@ -48,7 +48,13 @@ module Api
       end
 
       def assignment_params
-        params.require(:assignment).permit(:text).merge course_id: params[:course_id]
+        params.require(:assignment).permit(
+          :text,
+          tests: {
+            inputs: [],
+            outputs: []
+          }
+        ).merge course_id: params[:course_id]
       end
     end
   end
