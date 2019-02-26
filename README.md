@@ -16,3 +16,7 @@ rake db:create
 rake db:migrate
 rspec
 ```
+
+**Примечание**
+
+Для корректной работы JWT нужно поместить `master.key` в директорию `config`.
