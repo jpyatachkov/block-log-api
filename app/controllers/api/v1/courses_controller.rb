@@ -1,6 +1,6 @@
 module Api
   module V1
-    class CoursesController < ApplicationController
+    class CoursesController < ProtectedController
       before_action :set_course, only: %i[show update destroy]
 
       # GET /courses
