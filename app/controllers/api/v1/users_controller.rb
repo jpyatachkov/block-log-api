@@ -1,5 +1,4 @@
 module Api
-  # noinspection RubyClassModuleNamingConvention
   module V1
     class UsersController < ApplicationController
       def register

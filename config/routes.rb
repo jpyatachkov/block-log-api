@@ -7,8 +7,12 @@ Rails.application.routes.draw do
       post 'user_token' => 'user_token#create'
 
       resources :courses do
-        resources :assignments
+        resources :assignments do
+          resources :solutions, only: [:index]
+        end
       end
+
+      resources :solutions, only: [:create, :show]
     end
   end
 end

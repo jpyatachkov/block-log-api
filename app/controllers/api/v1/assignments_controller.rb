@@ -23,7 +23,7 @@ module Api
                  status: :created,
                  location: api_v1_course_assignment_url(@assignment.course, @assignment)
         else
-          render json: @assignment.errors, status: :bad_request
+          render json: { errors: @assignment.errors }, status: :bad_request
         end
       end
 
@@ -32,7 +32,7 @@ module Api
         if @assignment.update(assignment_params)
           render json: @assignment
         else
-          render json: @assignment.errors, status: :bad_request
+          render json: { errors: @assignment.errors }, status: :bad_request
         end
       end
 
