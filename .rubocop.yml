@@ -5,6 +5,9 @@ AllCops:
     - 'config/**/*'
     - 'db/schema.rb'
 
+Metrics/BlockLength:
+  Max: 50
+
 Metrics/LineLength:
   Max: 120
 
