@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       post 'users/register'
       post 'user_token' => 'user_token#create'
+
+      resources :courses
     end
   end
 end
