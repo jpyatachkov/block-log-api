@@ -11,6 +11,9 @@ Metrics/BlockLength:
 Metrics/LineLength:
   Max: 120
 
+Metrics/MethodLength:
+  Max: 30
+
 Naming/FileName:
   Exclude:
     - 'Gemfile'

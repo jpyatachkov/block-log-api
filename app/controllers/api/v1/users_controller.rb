@@ -11,7 +11,7 @@ module Api
         end
       end
 
-      # /POST /update_role  
+      # /POST /update_role
       def update_role
         u = User.find(3)
         u.add_role :moderator, Course

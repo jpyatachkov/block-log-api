@@ -9,9 +9,8 @@ class User < ApplicationRecord
 
   has_secure_password
 
-
   def assign_default_role
-    self.add_role(:user) if self.roles.blank?
+    add_role(:user) if roles.blank?
   end
 
   def self.from_token_request(request)

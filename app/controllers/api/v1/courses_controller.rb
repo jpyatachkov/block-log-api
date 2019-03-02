@@ -18,7 +18,7 @@ module Api
 
       # POST /courses
       def create
-        @course = Course.new(course_params.merge user_id: current_user.id)
+        @course = Course.new(course_params.merge(user_id: current_user.id))
 
         if @course.save
           render json: @course, status: :created, location: api_v1_course_url(@course)
@@ -28,7 +28,7 @@ module Api
       end
 
       # PATCH/PUT /courses/1
-      def update 
+      def update
         if @course.update(course_params)
           render json: @course
         else
@@ -44,16 +44,13 @@ module Api
       private
 
       def check_rights_before_create
-        unless current_user.has_role? :moderator, Course
-          return render json: {errors: "Not enough rights"}, status: :forbidden
-        end
+        has_proper_role = current_user.has_role? :moderator, Course
+        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
       end
 
       def check_rights_before_update_destroy
-        course_id = params[:id]
-        unless current_user.has_role? :moderator, @course
-          return render json: {errors: "Not enough rights"}, status: :forbidden 
-        end
+        has_proper_role = current_user.has_role? :moderator, @course
+        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
       end
 
       def set_course
