@@ -41,6 +41,19 @@ module Api
         @course.destroy
       end
 
+      # POST /course/1/enroll/
+      # maybe we need to check if its already exist
+      # and if so return 409
+      def enroll
+        course_user = CourseUser.new(course_id: params[:id], user_id: current_user.id)
+
+        if course_user.save
+          render json: course_user
+        else
+          render json: { errors: course_user.errors }, status: :conflict
+        end
+      end
+
       private
 
       def check_rights_before_create

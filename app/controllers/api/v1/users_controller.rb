@@ -13,8 +13,8 @@ module Api
 
       # /POST /update_role
       def update_role
-        u = User.find(3)
-        u.add_role :moderator, Course
+        u = User.find(4)
+        u.add_role :collaborator, Course.find(14)
       end
 
       private

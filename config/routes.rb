@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       
       #test version
       post 'users/update_role' => 'users#update_role'
-
+      post 'courses/:id/enroll' => 'courses#enroll'
       resources :courses do
         resources :assignments do
           resources :solutions, only: [:index]
