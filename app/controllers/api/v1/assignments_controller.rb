@@ -43,6 +43,19 @@ module Api
 
       private
 
+      def check_rights_before_create
+        unless current_user.has_role? :moderator, Assignment
+          return render json: {errors: "Not enough rights"}, status: :forbidden
+        end
+      end
+
+      def check_rights_brfore_update_destroy
+        assignment_id = params[:id]
+        unless current_user.has_role? :moderator, Assignment.find(assignment_id)
+          return render json: {errors: "Not enough rights"}, status: :forbidden 
+        end
+      end
+
       def set_assignment
         @assignment = Assignment.find(params[:id])
       end
