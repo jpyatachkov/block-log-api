@@ -51,8 +51,7 @@ module Api
 
       def check_rights_before_update_destroy
         course_id = params[:id]
-        unless current_user.has_role? :moderator, Course.find(course_id)
-          p 'here'
+        unless current_user.has_role? :moderator, @course
           return render json: {errors: "Not enough rights"}, status: :forbidden 
         end
       end
