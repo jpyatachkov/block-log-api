@@ -35,11 +35,11 @@ module Api
           render json: { errors: @solution.errors }, status: :bad_request
         end
       end
-      
+
       private
 
       def check_before_create
-        render json: { errors: 'You havent been accessed to this course'}
+        # render json: { errors: 'You havent been accessed to this course'}
       end
 
       def set_solution
