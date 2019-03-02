@@ -1,0 +1,12 @@
+1) Add user email
+2) We may need next roles
+    1) global admin - admin
+    2) moderator for courses (by default moderator can create course, add collaborators
+        can update and delete coure, can add exercises to course)
+    3) collaborator can add exercises to course, maybe can update some entities
+        (maybe moderator can approve this), he cant delete course and cant delete exercises
+    4) user without rights
+3) we may need to have table that stores modifications
+
+4) we need to add data to like comments to solution
+5) we need to create two entities (many to many) courses_users, exercises_users

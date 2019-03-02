@@ -15,6 +15,8 @@ gem 'rack-cors'
 
 gem 'knock'
 
+gem 'rolify'
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'

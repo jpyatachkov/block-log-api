@@ -2,6 +2,8 @@ module Api
   module V1
     class AssignmentsController < ProtectedController
       before_action :set_assignment, only: %i[show update destroy]
+      before_action :check_rights_before_create_update, only: %i[create update]
+      before_action :check_rights_before_destroy, only: %i[destroy]
 
       # GET /assignments
       def index
@@ -42,6 +44,16 @@ module Api
       end
 
       private
+
+      def check_rights_before_create_update
+        has_proper_roles = current_user.has_role? %i[moderator collaborator], Course.find(params[:course_id])
+        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_roles
+      end
+
+      def check_rights_before_destroy
+        has_proper_role = current_user.has_role? :moderator, @assignment.course
+        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
+      end
 
       def set_assignment
         @assignment = Assignment.find(params[:id])

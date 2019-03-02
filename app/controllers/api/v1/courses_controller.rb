@@ -2,6 +2,8 @@ module Api
   module V1
     class CoursesController < ProtectedController
       before_action :set_course, only: %i[show update destroy]
+      before_action :check_rights_before_create, only: %i[create]
+      before_action :check_rights_before_update_destroy, only: %i[update destroy]
 
       # GET /courses
       def index
@@ -16,7 +18,7 @@ module Api
 
       # POST /courses
       def create
-        @course = Course.new(course_params)
+        @course = Course.new(course_params.merge(user_id: current_user.id))
 
         if @course.save
           render json: @course, status: :created, location: api_v1_course_url(@course)
@@ -40,6 +42,16 @@ module Api
       end
 
       private
+
+      def check_rights_before_create
+        has_proper_role = current_user.has_role? :moderator, Course
+        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
+      end
+
+      def check_rights_before_update_destroy
+        has_proper_role = current_user.has_role? :moderator, @course
+        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
+      end
 
       def set_course
         @course = Course.find(params[:id])
