@@ -39,7 +39,9 @@ module Api
       private
 
       def check_before_create
-        # render json: { errors: 'You havent been accessed to this course'}
+        assignment = Assignment.find params[:solution][:assignment_id]
+        has_proper_role = current_user.has_role? %i[user moderator collaborator], assignment.course
+        render json: { errors: 'You havent been accessed to this course' } unless has_proper_role
       end
 
       def set_solution
