@@ -11,16 +11,10 @@ module Api
         end
       end
 
-      # /POST /update_role
-      def update_role
-        u = User.find(3)
-        u.add_role :moderator, Course
-      end
-
       private
 
       def register_params
-        params.require(:user).permit(:username, :password, :password_confirmation, :first_name, :last_name)
+        params.require(:user).permit(:username, :email, :password, :password_confirmation, :first_name, :last_name)
       end
     end
   end

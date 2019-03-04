@@ -66,7 +66,7 @@ module Api
             inputs: [],
             outputs: []
           }
-        ).merge course_id: params[:course_id]
+        ).merge(course_id: params[:course_id], user_id: current_user.id)
       end
     end
   end

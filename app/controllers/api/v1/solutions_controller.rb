@@ -2,10 +2,12 @@ module Api
   module V1
     class SolutionsController < ProtectedController
       before_action :set_solution, only: %i[show update destroy]
+      before_action :check_before_create, only: :create
 
+      # we can see solution by u_id and ex_id
       # GET /solutions
       def index
-        @solutions = Solution.all.where assignment_id: params[:assignment_id]
+        @solutions = Solution.find_all(params[:assignment_id], current_user)
         render json: @solutions
       end
 
@@ -34,19 +36,20 @@ module Api
         end
       end
 
-      # DELETE /solutions/1
-      def destroy
-        @solution.destroy
-      end
-
       private
 
+      def check_before_create
+        assignment = Assignment.find params[:solution][:assignment_id]
+        has_proper_role = current_user.has_role? %i[user moderator collaborator], assignment.course
+        render json: { errors: 'You havent been accessed to this course' } unless has_proper_role
+      end
+
       def set_solution
-        @solution = Solution.find(params[:id])
+        @solution = Solution.find(id: params[:id])
       end
 
       def solution_params
-        params.require(:solution).permit(:content, :assignment_id)
+        params.require(:solution).permit(:content, :assignment_id).merge user_id: current_user.id
       end
     end
   end
