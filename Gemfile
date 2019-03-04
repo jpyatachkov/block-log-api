@@ -20,8 +20,10 @@ gem 'rolify'
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'
+  gem 'fabrication'
   gem 'faker'
   gem 'rspec-rails'
+  gem 'shoulda-callback-matchers', '~> 1.1.1'
   gem 'shoulda-matchers'
 end
 

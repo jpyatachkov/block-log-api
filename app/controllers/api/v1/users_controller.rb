@@ -11,12 +11,6 @@ module Api
         end
       end
 
-      # /POST /update_role
-      def update_role
-        u = User.find(4)
-        u.add_role :collaborator, Course.find(14)
-      end
-
       private
 
       def register_params

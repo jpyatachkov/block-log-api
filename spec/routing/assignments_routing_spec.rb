@@ -6,6 +6,12 @@ RSpec.describe Api::V1::AssignmentsController, type: :routing do
       expect(get: '/api/v1/courses/1/assignments').to route_to('api/v1/assignments#index', course_id: '1')
     end
 
+    it 'routes to solutions index' do
+      expect(get: '/api/v1/courses/1/assignments/1/solutions').to route_to('api/v1/solutions#index',
+                                                                           course_id: '1',
+                                                                           assignment_id: '1')
+    end
+
     it 'routes to #show' do
       expect(get: '/api/v1/courses/1/assignments/1').to route_to('api/v1/assignments#show',
                                                                  course_id: '1',

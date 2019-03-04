@@ -5,10 +5,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       post 'users/register'
       post 'user_token' => 'user_token#create'
-      
-      #test version
-      post 'users/update_role' => 'users#update_role'
+
       post 'courses/:id/enroll' => 'courses#enroll'
+
       resources :courses do
         resources :assignments do
           resources :solutions, only: [:index]
