@@ -15,6 +15,9 @@ gem 'rack-cors'
 
 gem 'knock'
 
+gem 'kaminari' #pagination
+
+
 gem 'rolify'
 
 group :development, :test do
