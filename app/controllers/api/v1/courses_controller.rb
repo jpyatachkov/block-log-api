@@ -1,13 +1,13 @@
 module Api
   module V1
-    class CoursesController < ProtectedController
+    class CoursesController < BaseController
       before_action :set_course, only: %i[show update destroy]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
 
       # GET /courses
       def index
-        @courses = Course.all
+        @courses = Course.page(@page).per(@size)
         render json: @courses
       end
 

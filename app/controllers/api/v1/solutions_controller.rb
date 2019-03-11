@@ -1,13 +1,13 @@
 module Api
   module V1
-    class SolutionsController < ProtectedController
+    class SolutionsController < BaseController
       before_action :set_solution, only: %i[show update destroy]
       before_action :check_before_create, only: :create
 
       # we can see solution by u_id and ex_id
       # GET /solutions
       def index
-        @solutions = Solution.find_all(params[:assignment_id], current_user)
+        @solutions = Solution.find_all(params[:assignment_id], current_user).page(@page).per(@size)
         render json: @solutions
       end
 

@@ -1,13 +1,13 @@
 module Api
   module V1
-    class AssignmentsController < ProtectedController
+    class AssignmentsController < BaseController
       before_action :set_assignment, only: %i[show update destroy]
       before_action :check_rights_before_create_update, only: %i[create update]
       before_action :check_rights_before_destroy, only: %i[destroy]
 
       # GET /assignments
       def index
-        @assignments = Assignment.all.where course_id: params[:course_id]
+        @assignments = Assignment.all.where(course_id: params[:course_id]).page(@page).per(@size)
         render json: @assignments
       end
 
