@@ -7,7 +7,9 @@ module Api
       # we can see solution by u_id and ex_id
       # GET /solutions
       def index
-        @solutions = Solution.find_all(params[:assignment_id], current_user)
+        page = params[:page].to_i
+        size = params[:size].to_i
+        @solutions = Solution.find_all(params[:assignment_id], current_user).page(page).per(size)
         render json: @solutions
       end
 

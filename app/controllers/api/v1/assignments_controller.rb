@@ -7,7 +7,9 @@ module Api
 
       # GET /assignments
       def index
-        @assignments = Assignment.all.where course_id: params[:course_id]
+        page = params[:page].to_i
+        size = params[:size].to_i
+        @assignments = Assignment.all.where(course_id: params[:course_id]).page(page).per(size)
         render json: @assignments
       end
 

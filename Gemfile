@@ -15,8 +15,7 @@ gem 'rack-cors'
 
 gem 'knock'
 
-gem 'kaminari' #pagination
-
+gem 'kaminari' # pagination
 
 gem 'rolify'
 

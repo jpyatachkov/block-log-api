@@ -7,7 +7,9 @@ module Api
 
       # GET /courses
       def index
-        @courses = Course.all
+        page = params[:page].to_i
+        size = params[:size].to_i
+        @courses = Course.page(page).per(size)
         render json: @courses
       end
 
