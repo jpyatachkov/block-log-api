@@ -11,7 +11,7 @@ class User < ApplicationRecord
   after_create :assign_default_role
 
   def self.from_token_request(request)
-    find_by_username request.params['auth']['username']
+    find_by_username request.params.dig 'user_token', 'username'
   end
 
   protected
