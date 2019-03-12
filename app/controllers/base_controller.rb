@@ -1,13 +1,13 @@
-class BaseController < ProtectedController 
-    before_action :set_page_and_size
+class BaseController < ProtectedController
+  before_action :set_page_and_size
 
-    protected
+  protected
 
-    def set_page_and_size 
-        page = params[:page].to_i
-        size = params[:size].to_i
-        @page = page == 0 ? 1 : page 
-        @size = size == 0 ? 20 : size 
-        p @page
-    end
-end 
+  DEFAULT_PAGE_NUMBER = 1
+  DEFAULT_PAGE_SIZE = 20
+
+  def set_page_and_size
+    @page = params[:page].to_i || DEFAULT_PAGE_NUMBER
+    @size = params[:size].to_i || DEFAULT_PAGE_SIZE
+  end
+end
