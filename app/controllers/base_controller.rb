@@ -8,7 +8,7 @@ class BaseController < ProtectedController
 
   def paginate(collection)
     items = collection.page(@page).per(@size)
-    render json: {total: items.total_pages, items: items }
+    render json: items, root: :items, meta: { total: items.total_pages }, adapter: :json
   end
 
   def set_page_and_size

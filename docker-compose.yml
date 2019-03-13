@@ -1,0 +1,24 @@
+postgres:
+  image: postgres:10
+  environment:
+    POSTGRES_USER: 
+    POSTGRES_PASSWORD: 
+  ports:
+    - '5431:5432'
+  volumes:
+    - block-log-api-postgres:/var/lib/postgresql/data
+
+block-log-api:
+  environment:
+    BUNDLER_VERSION: 2.0.1
+    DATABASE_HOST: postgres
+  build: .
+  links:
+    - postgres
+  volumes:
+    - .:/block-log-api
+  ports:
+    - '3000:3000'
+  env_file:
+    - .env
+

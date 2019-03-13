@@ -7,8 +7,7 @@ module Api
       # we can see solution by u_id and ex_id
       # GET /solutions
       def index
-        @solutions = paginate(Solution.find_all(params[:assignment_id], current_user))
-        render json: @solutions
+        paginate Solution.find_all(params[:assignment_id], current_user)
       end
 
       # GET /solutions/1

@@ -7,8 +7,6 @@ module Api
 
       # GET /courses
       def index
-        # @courses = paginate(Course)
-        # render json: @courses
         paginate Course
       end
 
