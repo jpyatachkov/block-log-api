@@ -7,7 +7,9 @@ class BaseController < ProtectedController
   DEFAULT_PAGE_SIZE = 20
 
   def set_page_and_size
-    @page = params[:page].to_i || DEFAULT_PAGE_NUMBER
-    @size = params[:size].to_i || DEFAULT_PAGE_SIZE
+    page = params[:page].to_i
+    size = params[:size].to_i
+    @page = page.zero? ? DEFAULT_PAGE_NUMBER : page
+    @size = size.zero? ? DEFAULT_PAGE_SIZE : size
   end
 end
