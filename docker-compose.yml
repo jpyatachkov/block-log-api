@@ -1,8 +1,8 @@
 postgres:
   image: postgres:10
   environment:
-    POSTGRES_USER: imber
-    POSTGRES_PASSWORD: 9511031
+    POSTGRES_USER: 
+    POSTGRES_PASSWORD: 
   ports:
     - '5431:5432'
   volumes:

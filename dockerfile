@@ -21,8 +21,8 @@ RUN bundle install
 # Copy in the application code from your work station at the current directory
 # over to the working directory.
 
-COPY . .
 RUN bundle update rake
+COPY . .
 
 
 EXPOSE 3000
