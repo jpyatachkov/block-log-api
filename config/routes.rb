@@ -14,7 +14,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :commetaries
+      resources :commentaries
 
       resources :solutions, only: [:create, :show]
     end
