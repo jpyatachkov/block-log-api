@@ -3,8 +3,10 @@
 ##################################################
 
 111) Add user jbuild serializer !!! 
+
 1) Move all data from active serializer to jbuilder
 2) Add Commnets 
+        Check comments properly
 3) Add /api/v1/mycourses
 4) Add admin 
 5) Also think about old demands 
