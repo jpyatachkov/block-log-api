@@ -8,9 +8,9 @@ module Api
       # redefine map maybe
       # rubocop:disable AlignHash
       TABLES_MAP = {
-        'course'        =>  Course,
-        'assignment'    => Assignment,
-        'solution'      => Solution
+        'course'        => 'Course',
+        'assignment'    => 'Assignment',
+        'solution'      => 'Solution'
       }
       # rubocop:enable AlignHash
 
@@ -18,29 +18,35 @@ module Api
       def index
         resource = TABLES_MAP[params[:resource]]
         resource_id = params[:resource_id]
-        paginate Commentary.where(profileable_type: resource, profileable_id: resource_id)
+
+        render json: { errors: 'Incorrect resource name' }, status: :bad_request if resource.nil?
+
+        query_hash = {profileable_type: resource}
+        query_hash.merge profileable_id: resource_id if !resource_id.nil?
+        paginate Commentary.all.where(query_hash)
       end
 
       def show
-        @comment
+        @commentary
       end
 
       def update
         # TODO HERE WE CANT MOVE OUR COMMENT TO ANOTHER TABLE
-        if @comment.update(commentary_params)
-            render @course
+        if @commentary.update(commentary_params)
+            render @commentary
           else
-            render json: { errors: @comment.errors }, status: :bad_request
+            render json: { errors: @commentary.errors }, status: :bad_request
           end
       end
 
+      # TODO SEND CUSTOM READING MESSAGE 404 NOT FOUND ASSOCIATED ENTITY
       def create
-        @comment = Commentary.new(commentary_params).merge(user_id: current_user.id, username: current_user.username)
+        @commentary = Commentary.new commentary_params.merge(user_id: current_user.id, username: current_user.username)
 
-        if @comment.save
-          render @comment, status: :created, location: api_v1_comment_url(@comment)
+        if @commentary.save
+          render @commentary, status: :created, location: api_v1_commentary_url(@commentary)
         else
-          render json: { errors: @comment.errors }, status: :bad_request
+          render json: { errors: @commentary.errors }, status: :bad_request
         end
       end
 
@@ -54,7 +60,8 @@ module Api
       # 2) Assignment - same strory (user that not enrolled the course, cant it see and doesnt have rights on course)
       # 3) Solution - can see only moderator, collaborator, creator - simplification
       def check_rights_before_create
-        has_proper_role = current_user.has_role? :any, Course
+        # fix this :any
+        has_proper_role = current_user.has_role? %i[moderator collaborator user], Course
         render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
       end
 
@@ -64,8 +71,7 @@ module Api
       # We need to store course id in record solution for this
       # Because rights checks by course id
       def check_rights_before_update_destroy
-        has_proper_role = current_user.has_role? %i[moderator collaborator], @course
-        
+        has_proper_role = current_user.has_role? %i[moderator collaborator], @course # Is it legal
         #check current user created this comment
         has_proper_role = Commentary.find(@comment.id, current_user.id) != nil unless has_proper_role
 
@@ -73,7 +79,7 @@ module Api
       end
 
       def set_commentary
-        @course = Course.find(params[:id])
+        @commentary = Commentary.find(params[:id])
       end
 
       def commentary_params

@@ -11,6 +11,11 @@
         3) Check get list comments by profile
         4) Check get list comments by profile and id
         5) Search comments (comment id, profile, profile + id)
+
+        1) Test moderator, collaborator, user references to course can see commentaries
+        2) Test moderator, collaborator, owner can modify comments 
+        3) Check that other users cant modify comments exlude comments to solutions
+        
 5) TODO check user email 
 6) Add custom error views
 7) Add /api/v1/mycourses
