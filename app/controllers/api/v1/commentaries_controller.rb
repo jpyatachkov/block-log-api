@@ -7,12 +7,6 @@ module Api
 
       # THINK HOW REDEFINE MAP IF ITS NEEDED
       # rubocop:disable AlignHash
-      CLASSES_MAP = {
-        'course'        => 'Course',
-        'assignment'    => 'Assignment',
-        'solution'      => 'Solution'
-      }.freeze
-
       TABLES_MAP = {
         'course'        => Course,
         'assignment'    => Assignment,
@@ -22,14 +16,15 @@ module Api
 
       # Search by resource, or resource and id
       def index
-        resource = CLASSES_MAP[params[:resource]]
+        resource = TABLES_MAP[params[:resource]]
         resource_id = params[:resource_id]
 
         render json: { errors: 'Incorrect resource name' }, status: :bad_request if resource.nil?
 
         # we want to see only acepted comments
-        query_hash = { profileable_type: resource, is_active: true }
-        query_hash.merge profileable_id: resource_id unless resource_id.nil?
+        query_hash = { profileable_type: resource.name, is_active: true }
+        query_hash[:profileable_id] = resource_id unless resource_id.nil?
+
         paginate Commentary.all.where(query_hash)
       end
 
@@ -86,10 +81,8 @@ module Api
       # We need to store course id in record solution for this
       # Because rights checks by course id
       def check_rights_before_update_destroy
-        has_proper_role = current_user.has_role? %i[moderator collaborator], @commentary.course
-
-        # check current user created this comment
-        has_proper_role = Commentary.exists?({ id: @commentary.id, user_id: current_user.id }) unless has_proper_role
+        has_proper_role = current_user.has_role?(%i[moderator collaborator], @commentary.course) ||
+                          Commentary.exists?(id: @commentary.id, user_id: current_user.id)
 
         render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
       end
@@ -103,13 +96,17 @@ module Api
         params.require(:commentary).permit(:comment)
       end
 
+      def validate_parameters
+        p 'hello'
+      end 
+
+      # chekc that we have all needed parameters
+      # maybe by required
+      # if here we send integer raise ex
       def commentary_params_create
+        validate_parameters
         comment = params.require(:commentary).permit(:comment)
 
-        # chekc that we have all needed parameters
-        # maybe by required
-
-        # if here we send integer raise ex
         comment[:profileable_type] = TABLES_MAP[params[:commentary][:resource]]
         comment[:profileable_id] = params[:commentary][:resource_id]
 
@@ -118,11 +115,8 @@ module Api
         end
 
         clazz = comment[:profileable_type]
-        if clazz == Course
-          course_id = clazz.find(comment[:profileable_id]).id
-        else
-          course_id = clazz.find(comment[:profileable_id]).course_id
-        end
+        column = clazz == Course ? :id : :course_id
+        course_id = clazz.find(comment[:profileable_id])[column]
 
         comment.merge course_id: course_id
       end
