@@ -4,14 +4,14 @@ module Api
       before_action :set_commentary, only: %i[show update destroy]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
-      
-      # redefine map maybe
+
+      # THINK HOW REDEFINE MAP IF ITS NEEDED
       # rubocop:disable AlignHash
       TABLES_MAP = {
         'course'        => 'Course',
         'assignment'    => 'Assignment',
         'solution'      => 'Solution'
-      }
+      }.freeze
       # rubocop:enable AlignHash
 
       # Search by resource, or resource and id
@@ -21,8 +21,8 @@ module Api
 
         render json: { errors: 'Incorrect resource name' }, status: :bad_request if resource.nil?
 
-        query_hash = {profileable_type: resource}
-        query_hash.merge profileable_id: resource_id if !resource_id.nil?
+        query_hash = { profileable_type: resource }
+        query_hash.merge profileable_id: resource_id unless resource_id.nil?
         paginate Commentary.all.where(query_hash)
       end
 
@@ -31,15 +31,15 @@ module Api
       end
 
       def update
-        # TODO HERE WE CANT MOVE OUR COMMENT TO ANOTHER TABLE
+        # HERE WE CANT MOVE OUR COMMENT TO ANOTHER TABLE
         if @commentary.update(commentary_params)
-            render @commentary
-          else
-            render json: { errors: @commentary.errors }, status: :bad_request
-          end
+          render @commentary
+        else
+          render json: { errors: @commentary.errors }, status: :bad_request
+        end
       end
 
-      # TODO SEND CUSTOM READING MESSAGE 404 NOT FOUND ASSOCIATED ENTITY
+      # SEND CUSTOM READING MESSAGE 404 NOT FOUND ASSOCIATED ENTITY
       def create
         @commentary = Commentary.new commentary_params.merge(user_id: current_user.id, username: current_user.username)
 
@@ -55,7 +55,7 @@ module Api
       # Before create check that user can by course do this
       # user rights for course
 
-      ### 3 entitues ###
+      ### 3 entities ###
       # 1) Course - can write any user of this course
       # 2) Assignment - same strory (user that not enrolled the course, cant it see and doesnt have rights on course)
       # 3) Solution - can see only moderator, collaborator, creator - simplification
@@ -72,8 +72,11 @@ module Api
       # Because rights checks by course id
       def check_rights_before_update_destroy
         has_proper_role = current_user.has_role? %i[moderator collaborator], @course # Is it legal
-        #check current user created this comment
-        has_proper_role = Commentary.find(@comment.id, current_user.id) != nil unless has_proper_role
+        # check current user created this comment
+
+        # rubocop:disable Style/OrAssignment
+        has_proper_role = Commentary.find(@comment.id, current_user.id).nil? unless has_proper_role
+        # rubocop:enable Style/OrAssignment?
 
         render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
       end
