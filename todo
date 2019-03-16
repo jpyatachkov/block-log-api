@@ -40,19 +40,43 @@
 rails g migration AddOwnerToCourse user:references
 raild g model CourseUser user:references course:references course_mark:integer
 
-
+# TODO i
 TESTS: 
-        1) Course moderator created commentary to course                + 
-        2) -//- to assignment                                           +
-        3) -//- to solution                                             + 
-        4) -//- get comments to current course                          +  
-        5) -//- get comment by id                                       + 
-        7) -//- updates entity to course (equal to assignment, solution)                                                         
+        MODERATOR
+        1) Course moderator created commentary to course                        + 
+        2) -//- to assignment                                                   +
+        3) -//- to solution                                                     +        
+        4) -//- get comments to current course                                  +  
+        5) -//- get comment by id                                               + 
+        7) -//- updates entity to course (equal to assignment, solution)        + 
+        8) -//- deletes entitiy to course                                       +    
+        COLLABORATOR 
+        1) Course moderator created commentary to course                        + 
+        2) -//- to assignment                                                   +
+        3) -//- to solution                                                     +        
+        4) -//- get comments to current course                                  +  
+        5) -//- get comment by id                                               + 
+        7) -//- updates entity to course (equal to assignment, solution)        + 
+        8) -//- deletes entitiy to course                                       +
+        owner moderator cehcked 
+
+        USER
+        1) Course moderator created commentary to course                        + 
+        2) -//- to assignment                                                   +
+        3) -//- to solution                                                     +        
+        4) -//- get comments to current course                                  +  
+        5) -//- get comment by id                                               + 
+        7) -//- updates entity to course (equal to assignment, solution)        + 
+        8) -//- deletes entitiy to course                                       +
+        NOBODY
+        1) Course moderator created commentary to course                        + 
+        2) -//- to assignment                                                   +
+        3) -//- to solution                                                     +        
+        4) -//- get comments to current course                                  +  
+        5) -//- get comment by id                                               + 
+        7) -//- updates entity to course (equal to assignment, solution)        + 
+        8) -//- deletes entitiy to course                                       +                                
         6) Course collaboraor created commentary to course               
-        7) -//- to assignment                                           
-        8) -//- to solution      
-        9) -//- get comments to current course                            
-        10) -//- get comment by id            
         11) updates owner                            
         11) Course user created commentary to course               
         12) -//- to assignment                                           

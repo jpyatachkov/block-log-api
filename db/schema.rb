@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_16_023249) do
+ActiveRecord::Schema.define(version: 2019_03_16_092416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(version: 2019_03_16_023249) do
     t.bigint "profileable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "course_id"
+    t.index ["course_id"], name: "index_commentaries_on_course_id"
     t.index ["profileable_type", "profileable_id"], name: "index_commentaries_on_profileable_type_and_profileable_id"
     t.index ["username"], name: "index_commentaries_on_username"
   end
@@ -114,6 +116,7 @@ ActiveRecord::Schema.define(version: 2019_03_16_023249) do
   add_foreign_key "assignment_users", "users"
   add_foreign_key "assignments", "courses"
   add_foreign_key "assignments", "users"
+  add_foreign_key "commentaries", "courses"
   add_foreign_key "course_users", "courses"
   add_foreign_key "course_users", "users"
   add_foreign_key "courses", "users"

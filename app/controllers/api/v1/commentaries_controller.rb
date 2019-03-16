@@ -31,9 +31,12 @@ module Api
         @commentary
       end
 
+      ##################################################################
+      ### CHECK THAT UDPATE NOT MOVED COMMENT TO ANOTHER TABLE #########
+      ##################################################################
       def update
         # HERE WE CANT MOVE OUR COMMENT TO ANOTHER TABLE
-        if @commentary.update(commentary_params)
+        if @commentary.update(commentary_params_update)
           render @commentary
         else
           render json: { errors: @commentary.errors }, status: :bad_request
@@ -46,7 +49,8 @@ module Api
 
       # SEND CUSTOM READING MESSAGE 404 NOT FOUND ASSOCIATED ENTITY
       def create
-        @commentary = Commentary.new commentary_params.merge(user_id: current_user.id, username: current_user.username)
+        # TODO check that associated entity
+        @commentary = Commentary.new commentary_params_create.merge(user_id: current_user.id, username: current_user.username)
 
         if @commentary.save
           render @commentary, status: :created, location: api_v1_commentary_url(@commentary)
@@ -60,12 +64,11 @@ module Api
       # Before create check that user can by course do this
       # user rights for course
 
-      ### 3 entities ###
+      #################################################################################################
       # 1) Course - can write any user of this course
       # 2) Assignment - same strory (user that not enrolled the course, cant it see and doesnt have rights on course)
       # 3) Solution - can see only moderator, collaborator, creator - simplification
       def check_rights_before_create
-        # fix this :any
         has_proper_role = current_user.has_role? %i[moderator collaborator user], Course
         render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
       end
@@ -76,9 +79,10 @@ module Api
       # We need to store course id in record solution for this
       # Because rights checks by course id
       def check_rights_before_update_destroy
-        has_proper_role = current_user.has_role? %i[moderator collaborator], @course # Is it legal
+        has_proper_role = current_user.has_role? %i[moderator collaborator], @commentary.course
+        p has_proper_role
+        
         # check current user created this comment
-
         # rubocop:disable Style/OrAssignment
         has_proper_role = Commentary.find(@comment.id, current_user.id).nil? unless has_proper_role
         # rubocop:enable Style/OrAssignment?
@@ -90,7 +94,12 @@ module Api
         @commentary = Commentary.find(params[:id])
       end
 
-      def commentary_params
+      # now comment cant refers to another resource
+      def commentary_params_update
+        params.require(:commentary).permit(:comment)
+      end
+
+      def commentary_params_create
         comment = params.require(:commentary).permit(:comment)
 
         # chekc that we have all needed parameters
