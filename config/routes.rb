@@ -14,6 +14,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :commetaries
+
       resources :solutions, only: [:create, :show]
     end
   end

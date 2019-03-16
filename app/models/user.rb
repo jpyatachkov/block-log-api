@@ -22,6 +22,6 @@ class User < ApplicationRecord
   protected
 
   def assign_default_role
-    add_role(:user) if roles.blank?
+    add_role(:user, Course) if roles.blank?
   end
 end
