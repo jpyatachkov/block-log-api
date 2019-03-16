@@ -81,10 +81,8 @@ module Api
       # We need to store course id in record solution for this
       # Because rights checks by course id
       def check_rights_before_update_destroy
-        has_proper_role = current_user.has_role? %i[moderator collaborator], @commentary.course
-
-        # check current user created this comment
-        has_proper_role = Commentary.exists?({ id: @commentary.id, user_id: current_user.id }) unless has_proper_role
+        has_proper_role = current_user.has_role?(%i[moderator collaborator], @commentary.course) ||
+                          Commentary.exists?(id: @commentary.id, user_id: current_user.id)
 
         render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
       end
