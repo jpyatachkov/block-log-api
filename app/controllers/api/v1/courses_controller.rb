@@ -59,6 +59,7 @@ module Api
                           .select(:resource_id)
                           .map(&:resource_id)
         paginate Course.where(id: ids, is_active: true)
+        # render '/api/v1/show' @total_pages, @items
       end
 
       private

@@ -23,7 +23,8 @@ module Api
 
         # we want to see only acepted comments
         query_hash = { profileable_type: resource.name, is_active: true }
-        query_hash.merge profileable_id: resource_id unless resource_id.nil?
+        query_hash[:profileable_id] = resource_id unless resource_id.nil?
+
         paginate Commentary.all.where(query_hash)
       end
 
@@ -98,17 +99,16 @@ module Api
       end
 
       def validate_parameters
-
+        p 'hello'
       end 
 
+      # chekc that we have all needed parameters
+      # maybe by required
+      # if here we send integer raise ex
       def commentary_params_create
         validate_parameters
         comment = params.require(:commentary).permit(:comment)
 
-        # chekc that we have all needed parameters
-        # maybe by required
-
-        # if here we send integer raise ex
         comment[:profileable_type] = TABLES_MAP[params[:commentary][:resource]]
         comment[:profileable_id] = params[:commentary][:resource_id]
 
@@ -116,15 +116,9 @@ module Api
           return render json: { errors: 'Incorrect resource name' }, status: :bad_request
         end
 
-        # FIX AS DESCRIBED BELOW
-        # column = :id]
-
         clazz = comment[:profileable_type]
-        if clazz == Course
-          course_id = clazz.find(comment[:profileable_id])[:id]
-        else
-          course_id = clazz.find(comment[:profileable_id]).course_id
-        end
+        column = clazz == Course ? :id : :course_id
+        course_id = clazz.find(comment[:profileable_id])[column]
 
         comment.merge course_id: course_id
       end
