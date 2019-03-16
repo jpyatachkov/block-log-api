@@ -15,7 +15,7 @@ class User < ApplicationRecord
   end
 
   def to_token_payload
-    roles = self.roles.select(:name).where(resource_type: nil).map(&:name)
+    roles = self.roles.select(:name).where(resource_type: :Course).map(&:name)
     { sub: id, role: roles }
   end
 
