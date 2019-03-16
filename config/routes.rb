@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
       post 'courses/:id/enroll' => 'courses#enroll'
 
+      get 'my_courses' => 'courses#user_courses'
       resources :courses do
         resources :assignments do
           resources :solutions, only: [:index]

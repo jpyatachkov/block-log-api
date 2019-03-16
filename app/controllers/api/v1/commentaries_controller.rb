@@ -7,12 +7,6 @@ module Api
 
       # THINK HOW REDEFINE MAP IF ITS NEEDED
       # rubocop:disable AlignHash
-      CLASSES_MAP = {
-        'course'        => 'Course',
-        'assignment'    => 'Assignment',
-        'solution'      => 'Solution'
-      }.freeze
-
       TABLES_MAP = {
         'course'        => Course,
         'assignment'    => Assignment,
@@ -22,13 +16,13 @@ module Api
 
       # Search by resource, or resource and id
       def index
-        resource = CLASSES_MAP[params[:resource]]
+        resource = TABLES_MAP[params[:resource]]
         resource_id = params[:resource_id]
 
         render json: { errors: 'Incorrect resource name' }, status: :bad_request if resource.nil?
 
         # we want to see only acepted comments
-        query_hash = { profileable_type: resource, is_active: true }
+        query_hash = { profileable_type: resource.name, is_active: true }
         query_hash.merge profileable_id: resource_id unless resource_id.nil?
         paginate Commentary.all.where(query_hash)
       end
@@ -117,9 +111,12 @@ module Api
           return render json: { errors: 'Incorrect resource name' }, status: :bad_request
         end
 
+        # FIX AS DESCRIBED BELOW
+        # column = :id]
+
         clazz = comment[:profileable_type]
         if clazz == Course
-          course_id = clazz.find(comment[:profileable_id]).id
+          course_id = clazz.find(comment[:profileable_id])[:id]
         else
           course_id = clazz.find(comment[:profileable_id]).course_id
         end

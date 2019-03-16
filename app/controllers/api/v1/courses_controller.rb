@@ -53,6 +53,15 @@ module Api
         end
       end
 
+      def user_courses
+        # not correct (by user roles)
+        ids = current_user.roles.where(resource_type: :Course)
+                          .where.not(resource_id: nil)
+                          .select(:resource_id)
+                          .map(&:resource_id)
+        paginate Course.where(id: ids, is_active: true)
+      end
+
       private
 
       def check_rights_before_create
