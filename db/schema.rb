@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2019_03_16_023249) do
 
   create_table "commentaries", force: :cascade do |t|
     t.text "comment"
-    t.boolean "is_active"
+    t.boolean "is_active", default: true
     t.integer "user_id"
     t.string "username"
     t.string "profileable_type"

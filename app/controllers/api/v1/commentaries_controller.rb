@@ -4,7 +4,8 @@ module Api
       before_action :set_commentary, only: %i[show update destroy]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
-      # redefine map
+      
+      # redefine map maybe
       # rubocop:disable AlignHash
       TABLES_MAP = {
         'course'        =>  Course,
@@ -13,8 +14,11 @@ module Api
       }
       # rubocop:enable AlignHash
 
+      # Search by resource, or resource and id
       def index
-        @comments
+        resource = TABLES_MAP[params[:resource]]
+        resource_id = params[:resource_id]
+        paginate Commentary.where(profileable_type: resource, profileable_id: resource_id)
       end
 
       def show
@@ -22,7 +26,12 @@ module Api
       end
 
       def update
-        @comment
+        # TODO HERE WE CANT MOVE OUR COMMENT TO ANOTHER TABLE
+        if @comment.update(commentary_params)
+            render @course
+          else
+            render json: { errors: @comment.errors }, status: :bad_request
+          end
       end
 
       def create
@@ -40,9 +49,12 @@ module Api
       # Before create check that user can by course do this
       # user rights for course
 
-      ### ??? ###
+      ### 3 entitues ###
+      # 1) Course - can write any user of this course
+      # 2) Assignment - same strory (user that not enrolled the course, cant it see and doesnt have rights on course)
+      # 3) Solution - can see only moderator, collaborator, creator - simplification
       def check_rights_before_create
-        has_proper_role = current_user.has_role? :moderator, Course
+        has_proper_role = current_user.has_role? :any, Course
         render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
       end
 
@@ -52,7 +64,11 @@ module Api
       # We need to store course id in record solution for this
       # Because rights checks by course id
       def check_rights_before_update_destroy
-        has_proper_role = current_user.has_role? :moderator, @course
+        has_proper_role = current_user.has_role? %i[moderator collaborator], @course
+        
+        #check current user created this comment
+        has_proper_role = Commentary.find(@comment.id, current_user.id) != nil unless has_proper_role
+
         render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
       end
 

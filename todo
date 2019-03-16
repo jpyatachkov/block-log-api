@@ -2,47 +2,35 @@
 ####### CURRENT ##################################
 ##################################################
 
-111) Add user jbuild serializer !!! 
-
-1) Move all data from active serializer to jbuilder
-2) Add Commnets 
-        Check comments properly
-3) Add /api/v1/mycourses
-4) Add admin 
-5) Also think about old demands 
-
-
-
-
-##################################################
-####### OLD ######################################
-##################################################
-+ 1) Add user email + 
-2) We may need next roles
--    1) global admin - admin ??
-+-    2) moderator for courses (by default moderator can create course, add collaborators
-        can update and delete coure, can add exercises to course) 
-        Moderator added + 
-        Add collaborator ??? 
-+-    3) collaborator can add exercises to course, maybe can update some entities
-        (maybe moderator can approve this), he cant delete course and cant delete exercises
-        Role added + 
-        Approve ???? think about this
-+    4) user without rights + 
-# think about this
-3) we may need to have table that stores modifications
-
-4) we need to add data to like comments to solution
-5) we need to create two entities (many to many) courses_users, exercises_users + 
-
-TODO 
-1)    # test moderator + 
-      # test collaborator  +
-      # test user enroll + 
-2) Implement destroy solution or remove it +
-3) Implement check before auth solution + 
-4) enroll course check for exist key user_id cour + 
-
+1) Add user jbuild serializer !!!                       + 
+2) Move all data from active serializer to jbuilder     + 
+3) Add default value is active true for comments        +
+4) Add Commnets (Check comments properly)               -+
+        1) Check create comment course, assignment, solution
+        2) Check get one comment by id
+        3) Check get list comments by profile
+        4) Check get list comments by profile and id
+        5) Search comments (comment id, profile, profile + id)
+5) TODO check user email 
+6) Add custom error views
+7) Add /api/v1/mycourses
+8) Add admin 
+9) Also think about old demands 
+        1) We may need next roles
+        -    1) global admin - admin ??
+        +-    2) moderator for courses (by default moderator can create course, add collaborators
+                can update and delete coure, can add exercises to course) 
+                Moderator added + 
+                Add collaborator ??? 
+        +-    3) collaborator can add exercises to course, maybe can update some entities
+                (maybe moderator can approve this), he cant delete course and cant delete exercises
+                Role added + 
+                Approve ???? think about this
+        +    4) user without rights + 
+        # think about this
+        2) we may need to have table that stores modifications
+        3) we need to add data to like comments to solution
+        4) we need to create two entities (many to many) courses_users, exercises_users + 
 
 rails g migration AddOwnerToCourse user:references
 raild g model CourseUser user:references course:references course_mark:integer
