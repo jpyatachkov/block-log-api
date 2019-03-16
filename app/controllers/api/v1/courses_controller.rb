@@ -54,7 +54,6 @@ module Api
       end
 
       def user_courses
-        # not correct (by user roles)
         ids = current_user.roles.where(resource_type: :Course)
                           .where.not(resource_id: nil)
                           .select(:resource_id)

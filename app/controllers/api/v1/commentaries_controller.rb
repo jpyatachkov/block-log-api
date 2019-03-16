@@ -97,7 +97,12 @@ module Api
         params.require(:commentary).permit(:comment)
       end
 
+      def validate_parameters
+
+      end 
+
       def commentary_params_create
+        validate_parameters
         comment = params.require(:commentary).permit(:comment)
 
         # chekc that we have all needed parameters
