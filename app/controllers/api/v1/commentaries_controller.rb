@@ -21,7 +21,8 @@ module Api
 
         render json: { errors: 'Incorrect resource name' }, status: :bad_request if resource.nil?
 
-        query_hash = { profileable_type: resource }
+        # we want to see only acepted comments
+        query_hash = { profileable_type: resource, is_active: true }
         query_hash.merge profileable_id: resource_id unless resource_id.nil?
         paginate Commentary.all.where(query_hash)
       end
@@ -37,6 +38,10 @@ module Api
         else
           render json: { errors: @commentary.errors }, status: :bad_request
         end
+      end
+
+      def destroy
+        @commentary.destroy
       end
 
       # SEND CUSTOM READING MESSAGE 404 NOT FOUND ASSOCIATED ENTITY

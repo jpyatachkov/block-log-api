@@ -7,7 +7,7 @@ module Api
 
       # GET /courses
       def index
-        paginate Course
+        paginate Course.where(is_active: true)
       end
 
       # GET /courses/1

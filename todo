@@ -39,3 +39,23 @@
 
 rails g migration AddOwnerToCourse user:references
 raild g model CourseUser user:references course:references course_mark:integer
+
+
+TESTS: 
+        1) Course moderator created commentary to course                + 
+        2) -//- to assignment                                           +
+        3) -//- to solution                                             + 
+        4) -//- get comments to current course                          +  
+        5) -//- get comment by id                                       + 
+        7) -//- updates entity to course (equal to assignment, solution)                                                         
+        6) Course collaboraor created commentary to course               
+        7) -//- to assignment                                           
+        8) -//- to solution      
+        9) -//- get comments to current course                            
+        10) -//- get comment by id            
+        11) updates owner                            
+        11) Course user created commentary to course               
+        12) -//- to assignment                                           
+        13) -//- to solution      
+        14) -//- get comments to current course                           
+        15) -//- get comment by id                                      
