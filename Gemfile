@@ -10,11 +10,15 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'jbuilder', '~> 2.8.0'
 
+gem 'rails_admin', '~> 1.3'
+
 gem 'olive_branch'
 
 gem 'rack-cors'
 
 gem 'knock'
+
+gem 'devise'
 
 gem 'kaminari' # pagination
 

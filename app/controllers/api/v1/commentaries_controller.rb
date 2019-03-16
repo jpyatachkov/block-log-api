@@ -5,23 +5,34 @@ module Api
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
 
-      # THINK HOW REDEFINE MAP IF ITS NEEDED
-      # rubocop:disable AlignHash
-      TABLES_MAP = {
-        'course'        => Course,
-        'assignment'    => Assignment,
-        'solution'      => Solution
-      }.freeze
-      # rubocop:enable AlignHash
+      ############################################
+      ############ ERRORS ########################
+      ############################################
+      ### 1) NOT FOUND ASSOCIATED ENTITY - {status: "Not found":
+      ###     ErrorMessage: "Associated entity not found"} :state :not_found
+      ### 2) NOT FOUND ENTITY - {status: "Not found": ErrorMessage: "Entity"}
+      ### 3) UNAUTHORIZED - RENDERED BY kaminari
+      ### 4) FORBIDDEN - {status: "Forbidden", ErrorMessage: "You haven't got enough rights"}
+      ### 5) BAD_REQUEST - {status: "Field incorrect", "Field empty"} ...
+      #############################################
 
-      # Search by resource, or resource and id
+      TABLES_MAP = {
+        course: Course,
+        assignment: Assignment,
+        solution: Solution
+      }.freeze
+
+      # ALSO WE NEED TO CHECK HOW TO CONVERT to_sym
+
+      # GET /commentaries
+      # Search commentarie by resource and maybe resourse_id
       def index
-        resource = TABLES_MAP[params[:resource]]
+        resource = TABLES_MAP[params[:resource].to_sym]
         resource_id = params[:resource_id]
 
         render json: { errors: 'Incorrect resource name' }, status: :bad_request if resource.nil?
 
-        # we want to see only acepted comments
+        # is_active - to get only alive comments
         query_hash = { profileable_type: resource.name, is_active: true }
         query_hash[:profileable_id] = resource_id unless resource_id.nil?
 
@@ -40,6 +51,7 @@ module Api
         if @commentary.update(commentary_params_update)
           render @commentary
         else
+          ### render error for 404, 500 - database crush
           render json: { errors: @commentary.errors }, status: :bad_request
         end
       end
@@ -57,6 +69,7 @@ module Api
         if @commentary.save
           render @commentary, status: :created, location: api_v1_commentary_url(@commentary)
         else
+          ### render error for 404, 500 - database crush
           render json: { errors: @commentary.errors }, status: :bad_request
         end
       end
@@ -89,6 +102,7 @@ module Api
 
       def set_commentary
         @commentary = Commentary.find(params[:id])
+        # check here that commentary nil
       end
 
       # now comment cant refers to another resource
@@ -98,7 +112,7 @@ module Api
 
       def validate_parameters
         p 'hello'
-      end 
+      end
 
       # chekc that we have all needed parameters
       # maybe by required
@@ -107,18 +121,16 @@ module Api
         validate_parameters
         comment = params.require(:commentary).permit(:comment)
 
-        comment[:profileable_type] = TABLES_MAP[params[:commentary][:resource]]
-        comment[:profileable_id] = params[:commentary][:resource_id]
+        resource_class = TABLES_MAP[params[:commentary][:resource].to_sym]
+        resource_id = params[:commentary][:resource_id]
 
-        if comment[:profileable_type].nil?
-          return render json: { errors: 'Incorrect resource name' }, status: :bad_request
-        end
+        return render json: { errors: 'Incorrect resource name' }, status: :bad_request if resource_class.nil?
+        return render json: { errors: 'Incorrect resource id' }, status: :bad_request if resource_id.nil?
 
-        clazz = comment[:profileable_type]
-        column = clazz == Course ? :id : :course_id
-        course_id = clazz.find(comment[:profileable_id])[column]
+        column = resource_class == Course ? :id : :course_id
+        course_id = resource_class.find(resource_id)[column]
 
-        comment.merge course_id: course_id
+        comment.merge(course_id: course_id, profileable_type: resource_class, profileable_id: resource_id)
       end
     end
   end
