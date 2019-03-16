@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_04_202915) do
+ActiveRecord::Schema.define(version: 2019_03_16_092416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,21 @@ ActiveRecord::Schema.define(version: 2019_03_04_202915) do
     t.bigint "user_id"
     t.index ["course_id"], name: "index_assignments_on_course_id"
     t.index ["user_id"], name: "index_assignments_on_user_id"
+  end
+
+  create_table "commentaries", force: :cascade do |t|
+    t.text "comment"
+    t.boolean "is_active", default: true
+    t.integer "user_id"
+    t.string "username"
+    t.string "profileable_type"
+    t.bigint "profileable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "course_id"
+    t.index ["course_id"], name: "index_commentaries_on_course_id"
+    t.index ["profileable_type", "profileable_id"], name: "index_commentaries_on_profileable_type_and_profileable_id"
+    t.index ["username"], name: "index_commentaries_on_username"
   end
 
   create_table "course_users", force: :cascade do |t|
@@ -73,7 +88,9 @@ ActiveRecord::Schema.define(version: 2019_03_04_202915) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.bigint "course_id"
     t.index ["assignment_id"], name: "index_solutions_on_assignment_id"
+    t.index ["course_id"], name: "index_solutions_on_course_id"
     t.index ["user_id"], name: "index_solutions_on_user_id"
   end
 
@@ -99,9 +116,11 @@ ActiveRecord::Schema.define(version: 2019_03_04_202915) do
   add_foreign_key "assignment_users", "users"
   add_foreign_key "assignments", "courses"
   add_foreign_key "assignments", "users"
+  add_foreign_key "commentaries", "courses"
   add_foreign_key "course_users", "courses"
   add_foreign_key "course_users", "users"
   add_foreign_key "courses", "users"
   add_foreign_key "solutions", "assignments"
+  add_foreign_key "solutions", "courses"
   add_foreign_key "solutions", "users"
 end

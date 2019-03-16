@@ -4,7 +4,7 @@ class User < ApplicationRecord
   has_secure_password
 
   validates :username, presence: true, uniqueness: true
-  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
 
@@ -22,6 +22,6 @@ class User < ApplicationRecord
   protected
 
   def assign_default_role
-    add_role(:user) if roles.blank?
+    add_role(:user, Course) if roles.blank?
   end
 end

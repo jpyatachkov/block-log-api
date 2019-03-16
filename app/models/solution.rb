@@ -2,6 +2,9 @@ class Solution < ApplicationRecord
   validates :content, presence: true
 
   belongs_to :assignment
+  belongs_to :course
+
+  has_many :commentary
 
   def self.find_all(assignment_id, current_user)
     assignment = Assignment.find(assignment_id)

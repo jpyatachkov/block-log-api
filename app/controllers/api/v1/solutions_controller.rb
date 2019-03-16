@@ -7,6 +7,7 @@ module Api
       # we can see solution by u_id and ex_id
       # GET /solutions
       def index
+        # logic with rights implemented in find_all
         paginate Solution.find_all(params[:assignment_id], current_user)
       end
 
@@ -18,7 +19,7 @@ module Api
       # POST /solutions
       def create
         @solution = Solution.new(solution_params)
-        p @solution.assignment
+
         if @solution.save
           render @solution, status: :created, location: api_v1_solution_url(@solution)
         else
@@ -49,7 +50,9 @@ module Api
       end
 
       def solution_params
-        params.require(:solution).permit(:content, :assignment_id).merge user_id: current_user.id
+        # its scary
+        course_id = Assignment.find(params[:solution][:assignment_id]).course_id
+        params.require(:solution).permit(:content, :assignment_id).merge(user_id: current_user.id, course_id: course_id)
       end
     end
   end
