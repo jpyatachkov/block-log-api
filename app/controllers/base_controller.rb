@@ -1,5 +1,5 @@
 class BaseController < ProtectedController
-  before_action :set_page_and_size
+  before_action :set_pagination_params
 
   protected
 
@@ -7,13 +7,14 @@ class BaseController < ProtectedController
   DEFAULT_PAGE_SIZE = 20
 
   def paginate(collection)
-    items = collection.page(@page).per(@size)
-    render json: items, root: :items, meta: { total: items.total_pages }, adapter: :json
+    @items = collection.order(@order).page(@page).per(@size)
+    @total_pages = @items.total_pages
   end
 
-  def set_page_and_size
+  def set_pagination_params
     page = params[:page].to_i
     size = params[:size].to_i
+    @order = { created_at: :desc }
     @page = page.zero? ? DEFAULT_PAGE_NUMBER : page
     @size = size.zero? ? DEFAULT_PAGE_SIZE : size
   end

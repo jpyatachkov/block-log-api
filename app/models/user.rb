@@ -14,6 +14,11 @@ class User < ApplicationRecord
     find_by_username request.params.dig 'auth', 'username'
   end
 
+  def to_token_payload
+    roles = self.roles.select(:name).where(resource_type: :Course).map(&:name)
+    { sub: id, role: roles }
+  end
+
   protected
 
   def assign_default_role

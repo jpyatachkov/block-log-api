@@ -12,7 +12,7 @@ module Api
 
       # GET /courses/1
       def show
-        render json: @course
+        @course
       end
 
       # POST /courses
@@ -20,7 +20,7 @@ module Api
         @course = Course.new(course_params.merge(user_id: current_user.id))
 
         if @course.save
-          render json: @course, status: :created, location: api_v1_course_url(@course)
+          render @course, status: :created, location: api_v1_course_url(@course)
         else
           render json: { errors: @course.errors }, status: :bad_request
         end
@@ -29,7 +29,7 @@ module Api
       # PATCH/PUT /courses/1
       def update
         if @course.update(course_params)
-          render json: @course
+          render @course
         else
           render json: { errors: @course.errors }, status: :bad_request
         end

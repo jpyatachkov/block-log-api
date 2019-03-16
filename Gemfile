@@ -6,13 +6,10 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.2'
 
-# gem 'unicorn'
-# gem 'sideki'
-# gem 'redis-rails'
-
 gem 'bootsnap', '>= 1.1.0', require: false
 
-gem 'active_model_serializers', '~> 0.10.0'
+gem 'jbuilder', '~> 2.8.0'
+
 gem 'olive_branch'
 
 gem 'rack-cors'

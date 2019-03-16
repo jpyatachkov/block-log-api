@@ -1,27 +1,44 @@
-1) Add user email
+##################################################
+####### CURRENT ##################################
+##################################################
+
+1) Move all data from active serializer to jbuilder
+2) Add Commnets 
+3) Add /api/v1/mycourses
+4) Add admin 
+5) Also think about old demands 
+
+
+
+##################################################
+####### OLD ######################################
+##################################################
++ 1) Add user email + 
 2) We may need next roles
-    1) global admin - admin
-    2) moderator for courses (by default moderator can create course, add collaborators
-        can update and delete coure, can add exercises to course)
-    3) collaborator can add exercises to course, maybe can update some entities
+-    1) global admin - admin ??
++-    2) moderator for courses (by default moderator can create course, add collaborators
+        can update and delete coure, can add exercises to course) 
+        Moderator added + 
+        Add collaborator ??? 
++-    3) collaborator can add exercises to course, maybe can update some entities
         (maybe moderator can approve this), he cant delete course and cant delete exercises
-    4) user without rights
+        Role added + 
+        Approve ???? think about this
++    4) user without rights + 
+# think about this
 3) we may need to have table that stores modifications
 
 4) we need to add data to like comments to solution
-5) we need to create two entities (many to many) courses_users, exercises_users
-
-rails g migration AddOwnerToCourse user:references
-
-raild g model CourseUser user:references course:references course_mark:integer
-
-
+5) we need to create two entities (many to many) courses_users, exercises_users + 
 
 TODO 
-1)    # test moderator
-      # test collaborator 
-      # test user enroll
-
+1)    # test moderator + 
+      # test collaborator  +
+      # test user enroll + 
 2) Implement destroy solution or remove it +
-3) Implement check before auth solution
-4) enroll course check for exist key user_id cour
+3) Implement check before auth solution + 
+4) enroll course check for exist key user_id cour + 
+
+
+rails g migration AddOwnerToCourse user:references
+raild g model CourseUser user:references course:references course_mark:integer

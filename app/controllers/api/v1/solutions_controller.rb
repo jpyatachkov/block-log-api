@@ -12,15 +12,15 @@ module Api
 
       # GET /solutions/1
       def show
-        render json: @solution
+        render @solution
       end
 
       # POST /solutions
       def create
         @solution = Solution.new(solution_params)
-
+        p @solution.assignment
         if @solution.save
-          render json: @solution, status: :created, location: api_v1_solution_url(@solution)
+          render @solution, status: :created, location: api_v1_solution_url(@solution)
         else
           render json: { errors: @solution.errors }, status: :bad_request
         end
@@ -29,7 +29,7 @@ module Api
       # PATCH/PUT /solutions/1
       def update
         if @solution.update(solution_params)
-          render json: @solution
+          render @solution
         else
           render json: { errors: @solution.errors }, status: :bad_request
         end
@@ -44,7 +44,8 @@ module Api
       end
 
       def set_solution
-        @solution = Solution.find(id: params[:id])
+        id = params[:id]
+        @solution = Solution.find(id)
       end
 
       def solution_params

@@ -12,7 +12,7 @@ module Api
 
       # GET /assignments/1
       def show
-        render json: @assignment
+        @assignment
       end
 
       # POST /assignments
@@ -20,7 +20,7 @@ module Api
         @assignment = Assignment.new(assignment_params)
 
         if @assignment.save
-          render json: @assignment,
+          render @assignment,
                  status: :created,
                  location: api_v1_course_assignment_url(@assignment.course, @assignment)
         else
@@ -31,7 +31,7 @@ module Api
       # PATCH/PUT /assignments/1
       def update
         if @assignment.update(assignment_params)
-          render json: @assignment
+          render @assignment
         else
           render json: { errors: @assignment.errors }, status: :bad_request
         end
