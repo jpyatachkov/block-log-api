@@ -7,6 +7,7 @@ module Api
       # we can see solution by u_id and ex_id
       # GET /solutions
       def index
+        # logic with rights implemented in find_all
         paginate Solution.find_all(params[:assignment_id], current_user)
       end
 

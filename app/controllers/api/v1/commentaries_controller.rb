@@ -7,16 +7,22 @@ module Api
 
       # THINK HOW REDEFINE MAP IF ITS NEEDED
       # rubocop:disable AlignHash
-      TABLES_MAP = {
+      CLASSES_MAP = {
         'course'        => 'Course',
         'assignment'    => 'Assignment',
         'solution'      => 'Solution'
+      }.freeze
+
+      TABLES_MAP = {
+        'course'        => Course,
+        'assignment'    => Assignment,
+        'solution'      => Solution
       }.freeze
       # rubocop:enable AlignHash
 
       # Search by resource, or resource and id
       def index
-        resource = TABLES_MAP[params[:resource]]
+        resource = CLASSES_MAP[params[:resource]]
         resource_id = params[:resource_id]
 
         render json: { errors: 'Incorrect resource name' }, status: :bad_request if resource.nil?
@@ -49,8 +55,9 @@ module Api
 
       # SEND CUSTOM READING MESSAGE 404 NOT FOUND ASSOCIATED ENTITY
       def create
-        # TODO check that associated entity
-        @commentary = Commentary.new commentary_params_create.merge(user_id: current_user.id, username: current_user.username)
+        # check that associated entity
+        @commentary = Commentary.new commentary_params_create
+                      .merge(user_id: current_user.id, username: current_user.username)
 
         if @commentary.save
           render @commentary, status: :created, location: api_v1_commentary_url(@commentary)
@@ -80,12 +87,9 @@ module Api
       # Because rights checks by course id
       def check_rights_before_update_destroy
         has_proper_role = current_user.has_role? %i[moderator collaborator], @commentary.course
-        p has_proper_role
-        
+
         # check current user created this comment
-        # rubocop:disable Style/OrAssignment
-        has_proper_role = Commentary.find(@comment.id, current_user.id).nil? unless has_proper_role
-        # rubocop:enable Style/OrAssignment?
+        has_proper_role = Commentary.exists?({ id: @commentary.id, user_id: current_user.id }) unless has_proper_role
 
         render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
       end
@@ -113,7 +117,14 @@ module Api
           return render json: { errors: 'Incorrect resource name' }, status: :bad_request
         end
 
-        comment
+        clazz = comment[:profileable_type]
+        if clazz == Course
+          course_id = clazz.find(comment[:profileable_id]).id
+        else
+          course_id = clazz.find(comment[:profileable_id]).course_id
+        end
+
+        comment.merge course_id: course_id
       end
     end
   end
