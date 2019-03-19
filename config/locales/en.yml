@@ -31,3 +31,6 @@
 
 en:
   hello: "Hello world"
+  username_conflict: "Username already used"
+  course_not_found: "Course with gived id doesn't exist!"
+

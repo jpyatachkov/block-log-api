@@ -1,6 +1,7 @@
 module Api
   module V1
     class CoursesController < BaseController
+      include ErrorHelper
       before_action :set_course, only: %i[show update destroy]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
@@ -75,7 +76,11 @@ module Api
       end
 
       def set_course
-        @course = Course.find(params[:id])
+        @course = Course.find_by_id(params[:id])
+        if @course.nil?
+          @error = CourseErrorHelper.new(@course)
+          return render '/error', status: @error.http_status
+        end
       end
 
       def course_params

@@ -1,6 +1,7 @@
 module Api
   module V1
     class CommentariesController < BaseController
+      before_action :set_profirable, :only %i[create]
       before_action :set_commentary, only: %i[show update destroy]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
@@ -76,6 +77,16 @@ module Api
 
       private
 
+      # index, show uses this
+      def set_profirable
+        @profirable = case 
+          when 'course': Course
+          when 'assignment': Assignment
+          when 'solution': Solution
+          else nil
+        end
+      end
+
       # Before create check that user can by course do this
       # user rights for course
 
@@ -101,8 +112,9 @@ module Api
       end
 
       def set_commentary
-        @commentary = Commentary.find(params[:id])
-        # check here that commentary nil
+        # return render json: {hello: I18n.t(:hello)}
+        @commentary = Commentary.find_by_id(params[:id])
+        # return render 
       end
 
       # now comment cant refers to another resource
@@ -110,16 +122,12 @@ module Api
         params.require(:commentary).permit(:comment)
       end
 
-      def validate_parameters
-        p 'hello'
-      end
-
       # chekc that we have all needed parameters
       # maybe by required
       # if here we send integer raise ex
       def commentary_params_create
-        validate_parameters
-        comment = params.require(:commentary).permit(:comment)
+        # return render 
+        comment = params.require(:commentary).permit(:comment, :resource, :resource_id)
 
         resource_class = TABLES_MAP[params[:commentary][:resource].to_sym]
         resource_id = params[:commentary][:resource_id]

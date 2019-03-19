@@ -83,3 +83,5 @@ TESTS:
         13) -//- to solution      
         14) -//- get comments to current course                           
         15) -//- get comment by id                                      
+
+#ActiveRecord::StatementInvalid (PG::UnableToSend: no connection to the server)
