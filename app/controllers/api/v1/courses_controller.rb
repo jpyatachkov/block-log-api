@@ -1,7 +1,6 @@
 module Api
   module V1
     class CoursesController < BaseController
-      include ErrorHelper
       before_action :set_course, only: %i[show update destroy]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
@@ -23,7 +22,7 @@ module Api
         if @course.save
           render @course, status: :created, location: api_v1_course_url(@course)
         else
-          render json: { errors: @course.errors }, status: :bad_request
+          render_errors @course.errors
         end
       end
 
@@ -32,7 +31,7 @@ module Api
         if @course.update(course_params)
           render @course
         else
-          render json: { errors: @course.errors }, status: :bad_request
+          render_errors @course.errors
         end
       end
 
@@ -41,16 +40,15 @@ module Api
         @course.destroy
       end
 
-      # POST /course/1/enroll/
-      # maybe we need to check if its already exist
-      # and if so return 409
+      # POST /course/1/enroll
       def enroll
         course_user = CourseUser.new(course_id: params[:id], user_id: current_user.id)
 
         if course_user.save
           render json: course_user
         else
-          render json: { errors: course_user.errors }, status: :conflict
+          p course_user.errors
+          render_errors course_user.errors, status: :conflict
         end
       end
 
@@ -60,27 +58,23 @@ module Api
                           .select(:resource_id)
                           .map(&:resource_id)
         paginate Course.where(id: ids, is_active: true)
-        # render '/api/v1/show' @total_pages, @items
       end
 
       private
 
       def check_rights_before_create
         has_proper_role = current_user.has_role? :moderator, Course
-        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
+        render_errors t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
       def check_rights_before_update_destroy
         has_proper_role = current_user.has_role? :moderator, @course
-        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
+        render_errors t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
       def set_course
         @course = Course.find_by_id(params[:id])
-        if @course.nil?
-          @error = CourseErrorHelper.new(@course)
-          return render '/error', status: @error.http_status
-        end
+        render_errors t(:course_not_found), status: :not_found if @course.nil?
       end
 
       def course_params
