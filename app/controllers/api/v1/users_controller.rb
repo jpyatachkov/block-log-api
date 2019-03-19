@@ -8,8 +8,7 @@ module Api
         if user.save
           render user, status: :created
         else
-          # @error UserError.new(user)
-          render '/error', status: @error.http_status
+          render_errors user.errors
         end
       end
 

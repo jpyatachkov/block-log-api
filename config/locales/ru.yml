@@ -1,0 +1,14 @@
+ru:
+  course_not_found: "Курс не существует"
+  unsufficient_rights: "Недостаточно прав"
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            username:
+              unique: "Имя пользователя уже используется"
+            email:
+              blank: "Адрес электронной почты не может быть пустым"
+              invalid: "Неверный формат адреса электронной почты"
+              unique: "Адрес электронной почты уже используется"
