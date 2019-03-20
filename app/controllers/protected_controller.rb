@@ -1,8 +1,7 @@
 class ProtectedController < ApplicationController
   before_action :authenticate_user
 
-  def unauthorized_entity(data)
-    @error = UserErrorHelper.unauthorized
-    render '/error', status: @error.http_status
-  end 
+  def unauthorized_entity(_data)
+    render_errors I18n.t(:user_unauthorized), status: :unauthorized
+  end
 end

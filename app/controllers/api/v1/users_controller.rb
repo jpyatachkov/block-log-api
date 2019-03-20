@@ -8,15 +8,13 @@ module Api
         if user.save
           render user, status: :created
         else
-          @error UserError.new(user)
-          render '/error', status: @error.http_status
-          # render json: { errors: user.errors }, status: :bad_request
+          render_errors user.errors
         end
       end
 
       private
 
-      # bad_request some fields empty  
+      # bad_request some fields empty
       def register_params
         params.require(:user).permit(:username, :email, :password, :password_confirmation, :first_name, :last_name)
       end

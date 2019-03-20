@@ -38,5 +38,7 @@ module BlockLogApi
     config.api_only = true
 
     config.middleware.use OliveBranch::Middleware, inflection: 'camel'
+
+    config.i18n.default_locale = :ru
   end
 end

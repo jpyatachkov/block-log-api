@@ -7,13 +7,13 @@ module Api
       # we can see solution by u_id and ex_id
       # GET /solutions
       def index
-        # logic with rights implemented in find_all
+        # logic with acess rights implemented in find_all
         paginate Solution.find_all(params[:assignment_id], current_user)
       end
 
       # GET /solutions/1
       def show
-        render @solution
+        @solution
       end
 
       # POST /solutions
@@ -32,7 +32,7 @@ module Api
         if @solution.update(solution_params)
           render @solution
         else
-          render json: { errors: @solution.errors }, status: :bad_request
+          render_errors @solution.errors
         end
       end
 
@@ -45,8 +45,8 @@ module Api
       end
 
       def set_solution
-        id = params[:id]
-        @solution = Solution.find(id)
+        @solution = Solution.find_by_id(id)
+        render_errors I18n.t(:solution_not_found), status: :not_found if @solution.nil?
       end
 
       def solution_params
