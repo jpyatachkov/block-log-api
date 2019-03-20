@@ -1,4 +1,153 @@
 ru:
+  admin:
+    js:
+      true: 'True'
+      false: 'False'
+      is_present: 'Не пустое'
+      is_blank: 'Пустое'
+      date: 'Дата ...'
+      between_and_: 'Между ... и ...'
+      today: 'Сегодня'
+      yesterday: 'Вчера'
+      this_week: 'Эта неделя'
+      last_week: 'Предыдущая неделя'
+      number: 'Число ...'
+      contains: 'Содержит'
+      is_exactly: 'Точно совпадает'
+      starts_with: 'Начинается с'
+      ends_with: 'Заканчивается на'
+      too_many_objects: "Слишком много элементов, используйте поиск"
+      no_objects: "Ничего не найдено"
+    loading: "Загрузка..."
+    toggle_navigation: "Включить навигацию"
+    home:
+      name: "Главная"
+    pagination:
+      previous: "&laquo; Предыдущая"
+      next: "Следующая &raquo;"
+      truncate: "…"
+    misc:
+      search: "Поиск"
+      filter: "Фильтр"
+      refresh: "Обновить"
+      show_all: "Показать все"
+      add_filter: "Добавить фильтр..."
+      bulk_menu_title: "Выбранные элементы..."
+      remove: "Убрать"
+      add_new: "Добавить новый"
+      chosen: "Выбранный %{name}"
+      chose_all: "Выбрать все"
+      clear_all: "Очистить"
+      up: "Вверх"
+      down: "Вниз"
+      navigation: "Навигация"
+      log_out: "Выйти"
+      navigation_static_label: "Ссылки"
+      ago: "назад"
+    flash:
+      successful: "Успешно %{action} %{name}"
+      error: "Не удалось %{action} %{name}"
+      noaction: "Никаких изменений не выполнено"
+      model_not_found: "Модель '%{model}' не найдена"
+      object_not_found: "Объект %{model} с id '%{id}' не найден"
+    table_headers:
+      model_name: "Название модели"
+      last_used: "Последнее действие"
+      records: "Записи"
+      username: "Пользователь"
+      changes: "Изменения"
+      created_at: "Дата/Время"
+      item: "Элемент"
+      message: "Сообщение"
+    actions:
+      dashboard:
+        title: "Управление сайтом"
+        menu: "Контрольная панель"
+        breadcrumb: "Контрольная Панель"
+      index:
+        title: "%{model_label_plural}"
+        menu: "Список"
+        breadcrumb: "%{model_label_plural}"
+      show:
+        title: "Детали '%{object_label}'"
+        menu: "Просмотр"
+        breadcrumb: "%{object_label}"
+      show_in_app:
+        menu: "Показать в приложении"
+      new:
+        title: "Новый %{model_label}"
+        menu: "Создать"
+        breadcrumb: "Создать"
+        link: "Добавить новый"
+        done: "создано"
+      edit:
+        title: "Редактирование '%{object_label}'"
+        menu: "Редактирование"
+        breadcrumb: "Редактирование записи"
+        link: "Редактировать %{model_label}"
+        done: "сохранено"
+      delete:
+        title: "Удаление '%{object_label}'"
+        menu: "Удаление"
+        breadcrumb: "удаление"
+        link: "Удалить '%{object_label}'"
+        done: "удалено"
+      bulk_delete:
+        title: "Удалить много записей"
+        menu: "Мульти-удаление"
+        breadcrumb: "мульти-удаление"
+        bulk_link: "Удалить выбранныe"
+      export:
+        title: "%{model_label_plural} : экспорт"
+        menu: "Экспорт"
+        breadcrumb: "Экспорт"
+        link: "Экспорт всех найденных"
+        bulk_link: "Экспорт всех выбраных"
+        done: "экспортировать"
+      history_index:
+        title: "%{model_label_plural} : история"
+        menu: "История"
+        breadcrumb: "история"
+      history_show:
+        title: "История для %{model_label} '%{object_label}'"
+        menu: "История"
+        breadcrumb: "история"
+    form:
+      cancel: "Отмена"
+      basic_info: "Основное"
+      required: "Требуемое"
+      optional: "Необязательное"
+      one_char: "символ"
+      char_length_up_to: "длина не более"
+      char_length_of: "длина"
+      save: "Сохранить"
+      save_and_add_another: "Сохранить и добавить новый"
+      save_and_edit: "Сохранить и редактировать"
+      all_of_the_following_related_items_will_be_deleted: "? Следующие объекты будут удалены"
+      are_you_sure_you_want_to_delete_the_object: "Вы уверены что хотите удалить"
+      confirmation: "Да, уверен"
+      delete_confirmation: "Подтвердить удаление"
+      bulk_delete: "Следующие объекты будут удалены:"
+    export:
+      confirmation: "Экспортировать как %{name}"
+      select: "Выберите поля для экспорта"
+      select_all_fields: "Выбрать все поля"
+      fields_from: "Поля из %{name}"
+      fields_from_associated: "Поля из ассоциированной %{name}"
+      display: "Показать %{name}: %{type}"
+      options_for: "Настройки для %{name}"
+      empty_value_for_associated_objects: "<пусто>"
+      click_to_reverse_selection: 'Обратить выделение'
+      csv:
+        header_for_root_methods: "%{name}" # 'model' is available
+        header_for_association_methods: "%{name} [%{association}]"
+        encoding_to: "Кодировать в"
+        encoding_to_help: "Выберите результирующую кодировку. Кодировка по умолчанию: (%{name})"
+        skip_header: "Без заголовка"
+        skip_header_help: "Не выводить заголовок (без описаний полей)"
+        default_col_sep: ","
+        col_sep: "Разделитель столбцов"
+        col_sep_help: "Разделитель по умолчанию ('%{value}')"
   course_not_found: "Курс не существует"
   unsufficient_rights: "Недостаточно прав"
   activerecord:
@@ -12,3 +161,263 @@ ru:
               blank: "Адрес электронной почты не может быть пустым"
               invalid: "Неверный формат адреса электронной почты"
               unique: "Адрес электронной почты уже используется"
+  date:
+    abbr_day_names:
+      - Вс
+      - Пн
+      - Вт
+      - Ср
+      - Чт
+      - Пт
+      - Сб
+    abbr_month_names:
+      -
+      - янв.
+      - февр.
+      - марта
+      - апр.
+      - мая
+      - июня
+      - июля
+      - авг.
+      - сент.
+      - окт.
+      - нояб.
+      - дек.
+    day_names:
+      - воскресенье
+      - понедельник
+      - вторник
+      - среда
+      - четверг
+      - пятница
+      - суббота
+    formats:
+      default: "%d.%m.%Y"
+      long: "%-d %B %Y"
+      short: "%-d %b"
+    month_names:
+      -
+      - января
+      - февраля
+      - марта
+      - апреля
+      - мая
+      - июня
+      - июля
+      - августа
+      - сентября
+      - октября
+      - ноября
+      - декабря
+    order:
+      - :day
+      - :month
+      - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: около %{count} часа
+        few: около %{count} часов
+        many: около %{count} часов
+        other: около %{count} часа
+      about_x_months:
+        one: около %{count} месяца
+        few: около %{count} месяцев
+        many: около %{count} месяцев
+        other: около %{count} месяца
+      about_x_years:
+        one: около %{count} года
+        few: около %{count} лет
+        many: около %{count} лет
+        other: около %{count} лет
+      almost_x_years:
+        one: почти 1 год
+        few: почти %{count} года
+        many: почти %{count} лет
+        other: почти %{count} лет
+      half_a_minute: меньше минуты
+      less_than_x_seconds:
+        one: меньше %{count} секунды
+        few: меньше %{count} секунд
+        many: меньше %{count} секунд
+        other: меньше %{count} секунды
+      less_than_x_minutes:
+        one: меньше %{count} минуты
+        few: меньше %{count} минут
+        many: меньше %{count} минут
+        other: меньше %{count} минуты
+      over_x_years:
+        one: больше %{count} года
+        few: больше %{count} лет
+        many: больше %{count} лет
+        other: больше %{count} лет
+      x_seconds:
+        one: "%{count} секунду"
+        few: "%{count} секунды"
+        many: "%{count} секунд"
+        other: "%{count} секунды"
+      x_minutes:
+        one: "%{count} минуту"
+        few: "%{count} минуты"
+        many: "%{count} минут"
+        other: "%{count} минуты"
+      x_days:
+        one: "%{count} день"
+        few: "%{count} дня"
+        many: "%{count} дней"
+        other: "%{count} дня"
+      x_months:
+        one: "%{count} месяц"
+        few: "%{count} месяца"
+        many: "%{count} месяцев"
+        other: "%{count} месяца"
+      x_years:
+        one: "%{count} год"
+        few: "%{count} года"
+        many: "%{count} лет"
+        other: "%{count} года"
+    prompts:
+      second: Секунд
+      minute: Минут
+      hour: Часов
+      day: День
+      month: Месяц
+      year: Год
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: нужно подтвердить
+      blank: не может быть пустым
+      confirmation: не совпадает со значением поля %{attribute}
+      empty: не может быть пустым
+      equal_to: может иметь лишь значение, равное %{count}
+      even: может иметь лишь нечетное значение
+      exclusion: имеет зарезервированное значение
+      greater_than: может иметь значение большее %{count}
+      greater_than_or_equal_to: может иметь значение большее или равное %{count}
+      inclusion: имеет непредусмотренное значение
+      invalid: имеет неверное значение
+      less_than: может иметь значение меньшее чем %{count}
+      less_than_or_equal_to: может иметь значение меньшее или равное %{count}
+      model_invalid: 'Возникли ошибки: %{errors}'
+      not_a_number: не является числом
+      not_an_integer: не является целым числом
+      odd: может иметь лишь четное значение
+      other_than: должно отличаться от %{count}
+      present: нужно оставить пустым
+      required: не может отсутствовать
+      taken: уже существует
+      too_long:
+        one: слишком большой длины (не может быть больше чем %{count} символ)
+        few: слишком большой длины (не может быть больше чем %{count} символа)
+        many: слишком большой длины (не может быть больше чем %{count} символов)
+        other: слишком большой длины (не может быть больше чем %{count} символа)
+      too_short:
+        one: недостаточной длины (не может быть меньше %{count} символа)
+        few: недостаточной длины (не может быть меньше %{count} символов)
+        many: недостаточной длины (не может быть меньше %{count} символов)
+        other: недостаточной длины (не может быть меньше %{count} символа)
+      wrong_length:
+        one: неверной длины (может быть длиной ровно %{count} символ)
+        few: неверной длины (может быть длиной ровно %{count} символа)
+        many: неверной длины (может быть длиной ровно %{count} символов)
+        other: неверной длины (может быть длиной ровно %{count} символа)
+    template:
+      body: 'Проблемы возникли со следующими полями:'
+      header:
+        one: "%{model}: сохранение не удалось из-за %{count} ошибки"
+        few: "%{model}: сохранение не удалось из-за %{count} ошибок"
+        many: "%{model}: сохранение не удалось из-за %{count} ошибок"
+        other: "%{model}: сохранение не удалось из-за %{count} ошибки"
+  helpers:
+    select:
+      prompt: 'Выберите: '
+    submit:
+      create: Создать %{model}
+      submit: Сохранить %{model}
+      update: Сохранить %{model}
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%n %u"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: руб.
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            one: миллиард
+            few: миллиардов
+            many: миллиардов
+            other: миллиардов
+          million:
+            one: миллион
+            few: миллионов
+            many: миллионов
+            other: миллионов
+          quadrillion:
+            one: квадриллион
+            few: квадриллионов
+            many: квадриллионов
+            other: квадриллионов
+          thousand:
+            one: тысяча
+            few: тысяч
+            many: тысяч
+            other: тысяч
+          trillion:
+            one: триллион
+            few: триллионов
+            many: триллионов
+            other: триллионов
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: байт
+            few: байта
+            many: байт
+            other: байта
+          eb: ЭБ
+          gb: ГБ
+          kb: КБ
+          mb: МБ
+          pb: ПБ
+          tb: ТБ
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " и "
+      two_words_connector: " и "
+      words_connector: ", "
+  time:
+    am: утра
+    formats:
+      default: "%a, %d %b %Y, %H:%M:%S %z"
+      long: "%d %B %Y, %H:%M"
+      short: "%d %b, %H:%M"
+    pm: вечера
