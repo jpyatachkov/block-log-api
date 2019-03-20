@@ -16,7 +16,9 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :commentaries
+      resources :commentaries, except: [:index]
+      get '/commentaries/:profileable_type/:profileable_id' => 'commentaries#index'
+
 
       resources :solutions, only: [:create, :show]
     end

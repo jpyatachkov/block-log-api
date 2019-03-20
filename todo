@@ -4,6 +4,18 @@
           # render json: { errors: @solution.errors }, status: :bad_request
 
 
+      # WE STAORE course_id for check user rights
+      ############################################
+      ############ ERRORS ########################
+      ############################################
+      ### 1) NOT FOUND ASSOCIATED ENTITY - {status: "Not found":
+      ###     ErrorMessage: "Associated entity not found"} :state :not_found
+      ### 2) NOT FOUND ENTITY - {status: "Not found": ErrorMessage: "Entity"}
+      ### 3) UNAUTHORIZED - RENDERED BY kaminari
+      ### 4) FORBIDDEN - {status: "Forbidden", ErrorMessage: "You haven't got enough rights"}
+      ### 5) BAD_REQUEST - {status: "Field incorrect", "Field empty"} ...
+      #############################################
+
 ##################################################
 ####### CURRENT ##################################
 ##################################################
