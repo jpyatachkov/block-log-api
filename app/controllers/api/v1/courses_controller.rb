@@ -44,10 +44,10 @@ module Api
       def enroll
         course_user = CourseUser.new(course_id: params[:id], user_id: current_user.id)
 
+        ## RENDER WHAT???
         if course_user.save
           render json: course_user
         else
-          p course_user.errors
           render_errors course_user.errors, status: :conflict
         end
       end
@@ -64,17 +64,17 @@ module Api
 
       def check_rights_before_create
         has_proper_role = current_user.has_role? :moderator, Course
-        render_errors t(:unsufficient_rights), status: :forbidden unless has_proper_role
+        render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
       def check_rights_before_update_destroy
         has_proper_role = current_user.has_role? :moderator, @course
-        render_errors t(:unsufficient_rights), status: :forbidden unless has_proper_role
+        render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
       def set_course
         @course = Course.find_by_id(params[:id])
-        render_errors t(:course_not_found), status: :not_found if @course.nil?
+        render_errors I18n.t(:course_not_found), status: :not_found if @course.nil?
       end
 
       def course_params
