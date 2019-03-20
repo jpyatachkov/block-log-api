@@ -24,7 +24,7 @@ module Api
                  status: :created,
                  location: api_v1_course_assignment_url(@assignment.course, @assignment)
         else
-          render json: { errors: @assignment.errors }, status: :bad_request
+          render_errors @assignment.errors
         end
       end
 
@@ -33,7 +33,7 @@ module Api
         if @assignment.update(assignment_params)
           render @assignment
         else
-          render json: { errors: @assignment.errors }, status: :bad_request
+          render_errors @assignment.errors
         end
       end
 
@@ -45,17 +45,18 @@ module Api
       private
 
       def check_rights_before_create_update
-        has_proper_roles = current_user.has_role? %i[moderator collaborator], Course.find(params[:course_id])
-        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_roles
+        has_proper_role = current_user.has_role? %i[moderator collaborator], Course.find(params[:course_id])
+        render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
       def check_rights_before_destroy
         has_proper_role = current_user.has_role? :moderator, @assignment.course
-        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
+        render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
       def set_assignment
-        @assignment = Assignment.find(params[:id])
+        @assignment = Assignment.find_by_id(params[:id])
+        render_errors I18n.t(:assignment_not_found), status: :not_found if @assignment.nil?
       end
 
       def assignment_params

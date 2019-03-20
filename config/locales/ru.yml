@@ -1,4 +1,6 @@
 ru:
+  solution_not_found: "Решение не существует"
+  solution_assignment_not_found: "Связанное с решением задание не существет"
   user_unauthorized: "Вы не авторизованы"
   course_not_found: "Курс не существует"
   unsufficient_rights: "Недостаточно прав"
@@ -19,13 +21,16 @@ ru:
             last_name:
               blank: "Ваша фамилия не может быть пустой"
         course:
-          attributes: 
-            title: 
+          attributes:
+            title:
               taken: "Курс с таким заголовком существует"
               blank: "Заголовок не может быть пустым"
             description:
               blank: "Описание не может быть пустым"
-        # course_user:
+        course_user:
+          attributes:
+            user_id:
+              taken: "Вы уже записаны на курс"
 
 
             

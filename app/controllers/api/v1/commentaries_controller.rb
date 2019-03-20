@@ -1,11 +1,12 @@
 module Api
   module V1
     class CommentariesController < BaseController
-      before_action :set_profirable, only: %i[create]
+      before_action :set_profirable, only: %i[show]
       before_action :set_commentary, only: %i[show update destroy]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
 
+      # WE STAORE course_id for check user rights
       ############################################
       ############ ERRORS ########################
       ############################################
@@ -28,32 +29,29 @@ module Api
       # GET /commentaries
       # Search commentarie by resource and maybe resourse_id
       def index
-        resource = TABLES_MAP[params[:resource].to_sym]
-        resource_id = params[:resource_id]
+        # resource = TABLES_MAP[params[:resource].to_sym]
+        # resource_id = params[:resource_id]
 
-        render json: { errors: 'Incorrect resource name' }, status: :bad_request if resource.nil?
+        # render json: { errors: 'Incorrect resource name' }, status: :bad_request if resource.nil?
 
         # is_active - to get only alive comments
-        query_hash = { profileable_type: resource.name, is_active: true }
-        query_hash[:profileable_id] = resource_id unless resource_id.nil?
+        # query_hash)
+        # query_hash = { profileable_type: resource.name, is_active: true }
+        # query_hash[:profileable_id] = resource_id unless resource_id.nil?
 
-        paginate Commentary.all.where(query_hash)
+        paginate Commentary.all.where(profileable_type: @profirable, profileable_id: @profileable_id, is_active: true)
       end
 
       def show
         @commentary
       end
 
-      ##################################################################
-      ### CHECK THAT UDPATE NOT MOVED COMMENT TO ANOTHER TABLE #########
-      ##################################################################
       def update
         # HERE WE CANT MOVE OUR COMMENT TO ANOTHER TABLE
         if @commentary.update(commentary_params_update)
           render @commentary
         else
-          ### render error for 404, 500 - database crush
-          render json: { errors: @commentary.errors }, status: :bad_request
+          render_errors @commentary.errors
         end
       end
 
@@ -70,8 +68,7 @@ module Api
         if @commentary.save
           render @commentary, status: :created, location: api_v1_commentary_url(@commentary)
         else
-          ### render error for 404, 500 - database crush
-          render json: { errors: @commentary.errors }, status: :bad_request
+          render_errors @commentary.errors
         end
       end
 
@@ -79,6 +76,7 @@ module Api
 
       # index, show uses this
       def set_profirable
+        @profileable_id = params[:resource_id]
         @profirable = case params[:resource]
                       when 'course'
                         Course
@@ -87,6 +85,9 @@ module Api
                       when 'solution'
                         Solution
                       end
+
+        return render_errors I18n.t(:profirable_not_set) if @profirable.nil?
+        return render_errors I18n.t(:profirable_id_not_set) if @profirable_id.nil?
       end
 
       # Before create check that user can by course do this
@@ -98,7 +99,7 @@ module Api
       # 3) Solution - can see only moderator, collaborator, creator - simplification
       def check_rights_before_create
         has_proper_role = current_user.has_role? %i[moderator collaborator user], Course
-        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
+        render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
       # Before update check rights if user - creator
@@ -110,15 +111,16 @@ module Api
         has_proper_role = current_user.has_role?(%i[moderator collaborator], @commentary.course) ||
                           Commentary.exists?(id: @commentary.id, user_id: current_user.id)
 
-        render json: { errors: 'Not enough rights' }, status: :forbidden unless has_proper_role
+        render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
       def set_commentary
         @commentary = Commentary.find_by_id(params[:id])
+        render_errors I18n.t(:commentary_not_found), status: :not_found if @commentary.nil?
       end
 
-      # now comment cant refers to another resource
       def commentary_params_update
+        # now comment cant refers to another resource
         params.require(:commentary).permit(:comment)
       end
 
@@ -126,18 +128,13 @@ module Api
       # maybe by required
       # if here we send integer raise ex
       def commentary_params_create
-        comment = params.require(:commentary).permit(:comment, :resource, :resource_id)
+        comment = params.require(:commentary).permit(:comment, :profileable_type, :profileable_id)
+        set_profirable
 
-        resource_class = TABLES_MAP[params[:commentary][:resource].to_sym]
-        resource_id = params[:commentary][:resource_id]
+        column = @profirable == Course ? :id : :course_id
+        course_id = @profirable.find(@profileable_id)[column]
 
-        return render json: { errors: 'Incorrect resource name' }, status: :bad_request if resource_class.nil?
-        return render json: { errors: 'Incorrect resource id' }, status: :bad_request if resource_id.nil?
-
-        column = resource_class == Course ? :id : :course_id
-        course_id = resource_class.find(resource_id)[column]
-
-        comment.merge(course_id: course_id, profileable_type: resource_class, profileable_id: resource_id)
+        comment.merge(course_id: course_id, profileable_type: @profirable)
       end
     end
   end
