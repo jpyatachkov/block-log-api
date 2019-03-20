@@ -38,4 +38,11 @@ RailsAdmin.config do |config|
     # history_index
     # history_show
   end
+
+  config.authenticate_with do
+    authenticate_or_request_with_http_basic('Login required') do |username, password|
+      user = User.where(username: username).first
+      user.authenticate(password) if user&.is_admin
+    end
+  end
 end
