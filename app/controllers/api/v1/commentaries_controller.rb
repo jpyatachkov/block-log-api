@@ -1,7 +1,7 @@
 module Api
   module V1
     class CommentariesController < BaseController
-      before_action :set_profirable, only: %i[show]
+      before_action :set_profirable, only: %i[index]
       before_action :set_commentary, only: %i[show update destroy]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
@@ -17,14 +17,6 @@ module Api
       ### 4) FORBIDDEN - {status: "Forbidden", ErrorMessage: "You haven't got enough rights"}
       ### 5) BAD_REQUEST - {status: "Field incorrect", "Field empty"} ...
       #############################################
-
-      TABLES_MAP = {
-        course: Course,
-        assignment: Assignment,
-        solution: Solution
-      }.freeze
-
-      # ALSO WE NEED TO CHECK HOW TO CONVERT to_sym
 
       # GET /commentaries
       # Search commentarie by resource and maybe resourse_id
@@ -62,8 +54,8 @@ module Api
       # SEND CUSTOM READING MESSAGE 404 NOT FOUND ASSOCIATED ENTITY
       def create
         # check that associated entity
-        @commentary = Commentary.new commentary_params_create
-                      .merge(user_id: current_user.id, username: current_user.username)
+        @commentary = Commentary.new commentary_params_create.merge user_id: current_user.id,
+                                                                    username: current_user.username
 
         if @commentary.save
           render @commentary, status: :created, location: api_v1_commentary_url(@commentary)
@@ -109,7 +101,7 @@ module Api
       # Because rights checks by course id
       def check_rights_before_update_destroy
         has_proper_role = current_user.has_role?(%i[moderator collaborator], @commentary.course) ||
-                          Commentary.exists?(id: @commentary.id, user_id: current_user.id)
+            Commentary.exists?(id: @commentary.id, user_id: current_user.id)
 
         render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
@@ -124,11 +116,12 @@ module Api
         params.require(:commentary).permit(:comment)
       end
 
-      # chekc that we have all needed parameters
+      # Check that we have all needed parameters
       # maybe by required
       # if here we send integer raise ex
       def commentary_params_create
         comment = params.require(:commentary).permit(:comment, :profileable_type, :profileable_id)
+
         set_profirable
 
         column = @profirable == Course ? :id : :course_id
