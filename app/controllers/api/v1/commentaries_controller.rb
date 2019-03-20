@@ -2,13 +2,10 @@ module Api
   module V1
     class CommentariesController < BaseController
       before_action :set_profileable_index, only: %i[index]
-      before_action :set_profileable_create, only:%i[create]
+      before_action :set_profileable_create, only: %i[create]
       before_action :set_commentary, only: %i[show update destroy]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
-
-      # Route refavtor
-      # /:perog/:id
 
       # GET /commentaries
       # Search commentarie by resource and maybe resourse_id
@@ -36,8 +33,9 @@ module Api
       end
 
       def create
-        @commentary = Commentary.new commentary_params_create
-                      .merge(user_id: current_user.id, username: current_user.username)
+        # check that associated entity
+        @commentary = Commentary.new commentary_params_create.merge user_id: current_user.id,
+                                                                    username: current_user.username
 
         if @commentary.save
           render @commentary, status: :created, location: api_v1_commentary_url(@commentary)
@@ -57,7 +55,7 @@ module Api
         comment = params.require(:commentary).permit(:profileable_type, :profileable_id)
 
         search_profileable comment
-        
+
         render_errors @error unless @error.nil?
       end
 
@@ -104,9 +102,9 @@ module Api
         column = @profileable_type == Course ? :id : :course_id
         course_id = @profileable_type.find(@profileable_id)[column]
 
-        comment.merge(course_id: course_id, 
+        comment.merge course_id: course_id,
                       profileable_type: @profileable_type,
-                      profileable_id: @profileable_id)
+                      profileable_id: @profileable_id
       end
     end
   end
