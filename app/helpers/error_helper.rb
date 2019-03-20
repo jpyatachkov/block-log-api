@@ -12,6 +12,12 @@ module ErrorHelper
         # if user.description[:] = 
       end
     end 
+
+    def self.unauthorized
+      @status = 'unauthorized'
+      @message = :user_unauthorized
+      @http_status = :unauthorized
+    end
   end 
 
   class CourseErrorHelper < BaseErrorHelper

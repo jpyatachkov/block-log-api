@@ -1,7 +1,6 @@
 module Api
   module V1
     class CoursesController < BaseController
-      include ErrorHelper
       before_action :set_course, only: %i[show update destroy]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
