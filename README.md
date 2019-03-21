@@ -51,3 +51,8 @@ DATABASE_URL=postgresql://[user[:password]@][netloc][:port][/dbname]
 ```bash
 docker-compose logs -f api
 ```
+
+### HTTPS
+
+Предлагается использовать Let's Encrypt. Подразумевается, что сертификат сгенерирован **для домена api.blocklog.ru**
+и на целевой машине **лежит директория /etc/letsencrypt**, которая и монтируется к compose.
