@@ -10,11 +10,15 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'jbuilder', '~> 2.8.0'
 
+gem 'rails_admin', '~> 1.3'
+
 gem 'olive_branch'
 
 gem 'rack-cors'
 
 gem 'knock'
+
+gem 'devise'
 
 gem 'kaminari' # pagination
 
@@ -37,4 +41,5 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
+gem 'rails-i18n'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
