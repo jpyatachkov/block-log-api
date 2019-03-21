@@ -61,6 +61,7 @@ module Api
 
       def search_profileable(hash)
         @profileable_id = hash['profileable_id']
+        p hash
         @profileable_type = case hash['profileable_type']
                             when 'course'
                               Course
@@ -71,7 +72,7 @@ module Api
                             end
 
         # crutch for before action
-        return @error = I18n.t(:profileable_not_set) if @profileable_type.nil?
+        return @error = I18n.t(:profileable_type_not_set) if @profileable_type.nil?
         return @error = I18n.t(:profileable_id_not_set) if @profileable_id.nil?
       end
 

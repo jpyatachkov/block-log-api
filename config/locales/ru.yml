@@ -150,9 +150,22 @@ ru:
         col_sep_help: "Разделитель по умолчанию ('%{value}')"
   course_not_found: "Курс не существует"
   unsufficient_rights: "Недостаточно прав"
-#  activerecord:
-#    errors:
-#      models:
+  assignment_not_found: "Задача не существует"
+  commentary_not_found: "Комментарий не существует"
+  profileable_type_not_set: "Не указан ресурс к которому относиться комментарий"
+  profileable_id_not_set: "Не указана сущность к которому относиться комментарий"
+  solution_assignment_not_found: "Не найдена задача к решению"
+  solution_not_found: "Решение не существует"
+  user_unauthorized: "Вы не авторизованы"
+  
+  activerecord:
+    errors:
+      models:
+        course_user:
+          attributes:
+            user_id:
+              taken: "Вы уже записаны на курс"
+
 #        user:
 #          attributes:
 #            username:
