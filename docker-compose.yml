@@ -1,24 +1,31 @@
-postgres:
-  image: postgres:10
-  environment:
-    POSTGRES_USER: 
-    POSTGRES_PASSWORD: 
-  ports:
-    - '5431:5432'
-  volumes:
-    - block-log-api-postgres:/var/lib/postgresql/data
+version: '3'
 
-block-log-api:
-  environment:
-    BUNDLER_VERSION: 2.0.1
-    DATABASE_HOST: postgres
-  build: .
-  links:
-    - postgres
-  volumes:
-    - .:/block-log-api
-  ports:
-    - '3000:3000'
-  env_file:
-    - .env
+services:
+  postgres:
+    image: postgres:10
+    environment:
+      POSTGRES_USER: $DATABASE_USER
+      POSTGRES_PASSWORD: $DATABASE_PASSWORD
+    volumes:
+      - /data/block-log-api/postgresql/data/:/var/lib/postgresql/data/
 
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt/:/etc/letsencrypt/:ro
+    links:
+      - api
+
+  api:
+    build: .
+    env_file:
+      - .env
+    links:
+      - postgres
+    volumes:
+      - ./config/master.key:/var/www/block-log-api/config/master.key:ro
+      - /data/block-log-api/log/:/var/www/block-log-api/log/
