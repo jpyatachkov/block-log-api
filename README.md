@@ -12,6 +12,9 @@ DATABASE_PASSWORD=
 
 и указать в нем валидные данные для подключения к PostgreSQL.
 
+**ВНИМАНИЕ!** Не указывать `DATABASE_URL` - если это сделать, то переменные `DATABASE_HOST`, `DATABASE_USER`,
+`DATABASE_PASSWORD` **будут проигнорированы**!
+
 ```bash
 rake db:create
 rake db:migrate
@@ -51,6 +54,11 @@ DATABASE_URL=postgresql://[user[:password]@][netloc][:port][/dbname]
 ```bash
 docker-compose logs -f api
 ```
+
+### JWT
+
+Для корректной работы JWT нужно поместить `master.key` в директорию `config`. Он примонтируется к контейнеру
+с приложением автоматически.
 
 ### HTTPS
 
