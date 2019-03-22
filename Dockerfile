@@ -17,4 +17,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD bundle exec puma -C config/puma.rb
+CMD rake assets:precompile && bundle exec puma -C config/puma.rb
