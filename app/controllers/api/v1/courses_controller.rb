@@ -10,6 +10,14 @@ module Api
         paginate Course.where(is_active: true)
       end
 
+      def index_mine
+        ids = current_user.roles.where(resource_type: :Course)
+                  .where.not(resource_id: nil)
+                  .select(:resource_id)
+                  .map(&:resource_id)
+        paginate Course.where(id: ids, is_active: true)
+      end
+
       # GET /courses/1
       def show
         @course
@@ -50,14 +58,6 @@ module Api
         else
           render_errors course_user.errors, status: :conflict
         end
-      end
-
-      def user_courses
-        ids = current_user.roles.where(resource_type: :Course)
-                          .where.not(resource_id: nil)
-                          .select(:resource_id)
-                          .map(&:resource_id)
-        paginate Course.where(id: ids, is_active: true)
       end
 
       private

@@ -1,14 +1,20 @@
 module Api
   module V1
-    class UsersController < ApplicationController
-      def register
-        user = User.new register_params
+    class UsersController < ProtectedController
+      skip_before_action :authenticate_user, only: [:register]
 
-        if user.save
-          render user, status: :created
+      def register
+        @user = User.new register_params
+
+        if @user.save
+          render @user, status: :created
         else
-          render_errors user.errors
+          render_errors @user.errors
         end
+      end
+
+      def me
+        render current_user
       end
 
       private
