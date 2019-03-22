@@ -3,6 +3,7 @@ version: '3'
 services:
   postgres:
     image: postgres:10
+    restart: always
     environment:
       POSTGRES_USER: $DATABASE_USER
       POSTGRES_PASSWORD: $DATABASE_PASSWORD
@@ -11,6 +12,7 @@ services:
 
   nginx:
     image: nginx:latest
+    restart: always
     ports:
       - "80:80"
       - "443:443"
@@ -22,6 +24,7 @@ services:
 
   api:
     build: .
+    restart: always
     env_file:
       - .env
     links:
