@@ -35,4 +35,4 @@ services:
     volumes:
       - ./config/master.key:/var/www/block-log-api/config/master.key:ro
       - /data/block-log-api/log/:/var/www/block-log-api/log/
-      - /data/public/:/var/www/block-log-api/public/
+      - /data/block-log-api/public/:/var/www/block-log-api/public/
