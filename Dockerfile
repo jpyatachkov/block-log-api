@@ -1,7 +1,7 @@
 FROM ruby:2.6
 
 RUN apt-get update && \
-    apt-get install -qq -y build-essential libpq-dev postgresql-client --fix-missing --no-install-recommends
+    apt-get install -qq -y build-essential libpq-dev nodejs postgresql-client --fix-missing --no-install-recommends
 
 ENV RACK_ENV production
 ENV RAILS_ENV production
