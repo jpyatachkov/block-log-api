@@ -32,6 +32,7 @@ rspec
 Создать в корне проекта файл `.env` с содержимым
 
 ```dotenv
+DATABASE_NAME=
 DATABASE_USER=
 DATABASE_PASSWORD=
 DATABASE_URL=postgresql://[user[:password]@][netloc][:port][/dbname]
@@ -39,8 +40,12 @@ DATABASE_URL=postgresql://[user[:password]@][netloc][:port][/dbname]
 
 (значение `DATABASE_URL` - пример формата, который понимает PostgreSQL).
 
+`DATABASE_NAME` - имя БД,
+
 `DATABASE_USER` - это имя пользователя, из-под которого создается БД,
+
 `DATABASE_PASSWORD` - пароль пользователя,
+
 `DATABASE_URL` - URL для подключения к БД, который должен содержать значения `DATABASE_USER` и `DATABASE_PASSWORD`.
 
  Для запуска приложения в docker контейнере необходимо выполнить следующие комманды:
