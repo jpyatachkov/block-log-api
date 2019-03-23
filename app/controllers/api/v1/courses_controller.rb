@@ -28,7 +28,7 @@ module Api
         @course = Course.new(course_params.merge(user_id: current_user.id))
 
         if @course.save
-          render @course, status: :created, location: api_v1_course_url(@course)
+          render 'api/v1/courses/show', status: :created, location: api_v1_course_url(@course)
         else
           render_errors @course.errors
         end
@@ -37,7 +37,7 @@ module Api
       # PATCH/PUT /courses/1
       def update
         if @course.update(course_params)
-          render @course
+          render 'api/v1/courses/show'
         else
           render_errors @course.errors
         end

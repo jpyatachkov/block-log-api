@@ -19,10 +19,22 @@ module Api
         @commentary
       end
 
+      def create
+        # check that associated entity
+        @commentary = Commentary.new commentary_params_create.merge user_id: current_user.id,
+                                                                    username: current_user.username
+
+        if @commentary.save
+          render 'api/v1/commentaries/show', status: :created, location: api_v1_commentary_url(@commentary)
+        else
+          render_errors @commentary.errors
+        end
+      end
+
       def update
         # HERE WE CANT MOVE OUR COMMENT TO ANOTHER TABLE
         if @commentary.update(commentary_params_update)
-          render @commentary
+          render 'api/v1/commentaries/show'
         else
           render_errors @commentary.errors
         end
@@ -30,18 +42,6 @@ module Api
 
       def destroy
         @commentary.destroy
-      end
-
-      def create
-        # check that associated entity
-        @commentary = Commentary.new commentary_params_create.merge user_id: current_user.id,
-                                                                    username: current_user.username
-
-        if @commentary.save
-          render @commentary, status: :created, location: api_v1_commentary_url(@commentary)
-        else
-          render_errors @commentary.errors
-        end
       end
 
       private

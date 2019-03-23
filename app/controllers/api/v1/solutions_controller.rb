@@ -22,7 +22,7 @@ module Api
         @solution = Solution.new solution_params_create
 
         if @solution.save
-          render @solution, status: :created, location: api_v1_solution_url(@solution)
+          render 'api/v1/solutions/show', status: :created, location: api_v1_solution_url(@solution)
         else
           render_errors @solution.errors
         end
@@ -32,7 +32,7 @@ module Api
       # PATCH/PUT /solutions/1
       def update
         if @solution.update solution_params_update
-          render @solution
+          render 'api/v1/solutions/show'
         else
           render_errors @solution.errors
         end

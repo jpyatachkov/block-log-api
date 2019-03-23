@@ -20,7 +20,7 @@ module Api
         @assignment = Assignment.new(assignment_params)
 
         if @assignment.save
-          render @assignment,
+          render 'api/v1/assignments/show',
                  status: :created,
                  location: api_v1_course_assignment_url(@assignment.course, @assignment)
         else
@@ -31,7 +31,7 @@ module Api
       # PATCH/PUT /assignments/1
       def update
         if @assignment.update(assignment_params)
-          render @assignment
+          render 'api/v1/assignments/show'
         else
           render_errors @assignment.errors
         end
