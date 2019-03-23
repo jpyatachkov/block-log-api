@@ -72,8 +72,11 @@ module Api
                             end
 
         # crutch for before action
-        return @error = I18n.t(:profileable_type_not_set) if @profileable_type.nil?
-        return @error = I18n.t(:profileable_id_not_set) if @profileable_id.nil?
+        if @profileable_type.nil?
+          @error = I18n.t(:profileable_type_not_set)
+        elsif @profileable_id.nil?
+          @error = I18n.t(:profileable_id_not_set) if @profileable_id.nil?
+        end
       end
 
       def check_rights_before_create

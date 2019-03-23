@@ -139,7 +139,7 @@ ru:
       empty_value_for_associated_objects: "<пусто>"
       click_to_reverse_selection: 'Обратить выделение'
       csv:
-        header_for_root_methods: "%{name}" # 'model' is available
+        header_for_root_methods: "%{name}"
         header_for_association_methods: "%{name} [%{association}]"
         encoding_to: "Кодировать в"
         encoding_to_help: "Выберите результирующую кодировку. Кодировка по умолчанию: (%{name})"
@@ -152,8 +152,8 @@ ru:
   unsufficient_rights: "Недостаточно прав"
   assignment_not_found: "Задача не существует"
   commentary_not_found: "Комментарий не существует"
-  profileable_type_not_set: "Не указан ресурс к которому относиться комментарий"
-  profileable_id_not_set: "Не указана сущность к которому относиться комментарий"
+  profileable_type_not_set: "Не указан ресурс, к которому относится комментарий"
+  profileable_id_not_set: "Не указана сущность, к которой относится комментарий"
   solution_assignment_not_found: "Не найдена задача к решению"
   solution_not_found: "Решение не существует"
   user_unauthorized: "Вы не авторизованы"
@@ -165,27 +165,3 @@ ru:
           attributes:
             user_id:
               taken: "Вы уже записаны на курс"
-
-#        user:
-#          attributes:
-#            username:
-#              unique: "Имя пользователя уже используется"
-#            email:
-#              blank: "Адрес электронной почты не может быть пустым"
-#              invalid: "Неверный формат адреса электронной почты"
-#              taken: "Адрес электронной почты уже используется"
-#            first_name:
-#              blank: "Ваше имя не может быть пустым"
-#            last_name:
-#              blank: "Ваша фамилия не может быть пустой"
-#        course:
-#          attributes:
-#            title:
-#              taken: "Курс с таким заголовком существует"
-#              blank: "Заголовок не может быть пустым"
-#            description:
-#              blank: "Описание не может быть пустым"
-#        course_user:
-#          attributes:
-#            user_id:
-#              taken: "Вы уже записаны на курс"

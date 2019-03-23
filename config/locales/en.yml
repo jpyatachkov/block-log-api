@@ -1,3 +1,6 @@
 en:
   course_not_found: "Course with given id doesn't exist!"
   unsufficient_rights: "Not enough rights"
+  profileable_type_not_set: "Resource for comment unknown"
+  profileable_id_not_set: "Entity for comment unknown"
+  commentary_not_found: "Commentary not found"
