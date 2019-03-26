@@ -17,12 +17,12 @@ class User < ApplicationRecord
   end
 
   def to_token_payload
-    roles = self.roles.select(:name)
-                .where(resource_type: :Course)
-                .map(&:name)
-                .uniq
-    roles.delete 'collaborator'
-    { sub: id, role: roles }
+    main_roles = roles.select(:name)
+                      .where(resource_type: :Course)
+                      .map(&:name)
+                      .uniq
+                      .reject { |role| role == 'collaborator' }
+    { sub: id, role: main_roles }
   end
 
   protected
