@@ -26,29 +26,19 @@ module Api
       # POST /courses
       def create
         @course = Course.new(course_params.merge(user_id: current_user.id))
-        begin
-          if @course.save
-            render 'api/v1/courses/show', status: :created, location: api_v1_course_url(@course)
-          else
-            render_errors @course.errors
-          end
-        rescue ActiveRecord::RecordNotUnique
-          # crutch for uniform api
-          render_errors title: [I18n.t(:course_exist)]
+        if @course.save
+          render 'api/v1/courses/show', status: :created, location: api_v1_course_url(@course)
+        else
+          render_errors @course.errors
         end
       end
 
       # PATCH/PUT /courses/1
       def update
-        begin
-          if @course.update(course_params)
-            render 'api/v1/courses/show'
-          else
-            render_errors @course.errors
-          end
-        rescue ActiveRecord::RecordNotUnique
-          # crutch for uniform api
-          render_errors title: [I18n.t(:course_exist)]
+        if @course.update(course_params)
+          render 'api/v1/courses/show'
+        else
+          render_errors @course.errors
         end
       end
 

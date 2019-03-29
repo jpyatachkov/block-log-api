@@ -14,6 +14,16 @@ class Course < ApplicationRecord
     save
   end
 
+  def save
+    begin
+      super
+    rescue ActiveRecord::RecordNotUnique => e
+      logger.error e
+      @errors.add(:title, I18n.t(:course_exist))
+      return false
+    end
+  end
+
   protected
 
   def set_user_permissions
