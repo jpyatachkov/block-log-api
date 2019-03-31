@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_31_122048) do
+ActiveRecord::Schema.define(version: 2019_03_31_142721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2019_03_31_122048) do
   end
 
   create_table "assignments", force: :cascade do |t|
-    t.text "text"
+    t.text "description"
     t.bigint "course_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 2019_03_31_122048) do
     t.bigint "user_id"
     t.boolean "is_active", default: true
     t.text "program"
+    t.text "title"
     t.index ["course_id"], name: "index_assignments_on_course_id"
     t.index ["user_id"], name: "index_assignments_on_user_id"
   end
@@ -71,6 +72,7 @@ ActiveRecord::Schema.define(version: 2019_03_31_122048) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.boolean "is_active", default: true
+    t.text "short_description"
     t.index ["title", "is_active"], name: "index_courses_on_title_and_is_active", unique: true, where: "(is_active IS TRUE)"
     t.index ["user_id"], name: "index_courses_on_user_id"
   end

@@ -43,7 +43,7 @@ module Api
       def check_before_create
         solution = params.require(:solution).permit(:assignment_id)
         @assignment = Assignment.find_by_id solution[:assignment_id]
-        return render_errors I18n.t(:solution_assignment_not_found), status: :not_found if @assignment.nil?
+        return render_errors I18n.t(:solution_assignment_not_found), status: :not_found if @assignment.nil? || !@assignment.is_active
 
         has_proper_role = current_user.has_role? %i[user moderator collaborator], @assignment.course
         render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
@@ -51,14 +51,14 @@ module Api
 
       def check_before_show_delete
         has_proper_role = current_user.has_role?(%i[moderator collaborator], @solution.course) ||
-            Solution.exists?(id: @solution.id, user_id: current_user.id)
+                          Solution.exists?(id: @solution.id, user_id: current_user.id)
 
         render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
       def set_solution
         @solution = Solution.find_by_id(params[:id])
-        render_errors I18n.t(:solution_not_found), status: :not_found if @solution.nil?
+        render_errors I18n.t(:solution_not_found), status: :not_found if @solution.nil? || !@solution.assignment.is_active
       end
 
       # unused

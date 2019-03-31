@@ -4,6 +4,7 @@ class Course < ApplicationRecord
   has_many :commentary
 
   validates :title, presence: true
+  validates :short_description, presence: true
   validates :description, presence: true
 
   after_create :set_user_permissions,
