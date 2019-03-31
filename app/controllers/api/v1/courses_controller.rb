@@ -12,9 +12,9 @@ module Api
 
       def index_mine
         ids = current_user.roles.where(resource_type: :Course)
-                  .where.not(resource_id: nil)
-                  .select(:resource_id)
-                  .map(&:resource_id)
+                          .where.not(resource_id: nil)
+                          .select(:resource_id)
+                          .map(&:resource_id)
         paginate Course.where(id: ids, is_active: true)
       end
 
@@ -26,7 +26,6 @@ module Api
       # POST /courses
       def create
         @course = Course.new(course_params.merge(user_id: current_user.id))
-
         if @course.save
           render 'api/v1/courses/show', status: :created, location: api_v1_course_url(@course)
         else

@@ -3,7 +3,7 @@ class Course < ApplicationRecord
 
   has_many :commentary
 
-  validates :title, presence: true, uniqueness: true
+  validates :title, presence: true
   validates :description, presence: true
 
   after_create :set_user_permissions,
@@ -12,6 +12,16 @@ class Course < ApplicationRecord
   def destroy
     self.is_active = false
     save
+  end
+
+  def save
+    begin
+      super
+    rescue ActiveRecord::RecordNotUnique => e
+      logger.error e
+      @errors.add(:title, I18n.t(:course_exist))
+      return false
+    end
   end
 
   protected

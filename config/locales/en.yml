@@ -4,3 +4,5 @@ en:
   profileable_type_not_set: "Resource for comment unknown"
   profileable_id_not_set: "Entity for comment unknown"
   commentary_not_found: "Commentary not found"
+  course_exist: "Course with given title already exists"
+
