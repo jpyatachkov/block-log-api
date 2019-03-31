@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_31_103242) do
+ActiveRecord::Schema.define(version: 2019_03_31_122048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2019_03_31_103242) do
     t.jsonb "tests"
     t.bigint "user_id"
     t.boolean "is_active", default: true
+    t.text "program"
     t.index ["course_id"], name: "index_assignments_on_course_id"
     t.index ["user_id"], name: "index_assignments_on_user_id"
   end
@@ -85,7 +86,7 @@ ActiveRecord::Schema.define(version: 2019_03_31_103242) do
   end
 
   create_table "solutions", force: :cascade do |t|
-    t.text "content"
+    t.text "program"
     t.bigint "assignment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

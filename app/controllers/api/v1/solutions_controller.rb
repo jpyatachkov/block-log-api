@@ -67,7 +67,7 @@ module Api
       end
 
       def solution_params_create
-        solution = params.require(:solution).permit(:content, :assignment_id)
+        solution = params.require(:solution).permit(:program, :assignment_id)
         solution.merge(user_id: current_user.id, course_id: @assignment.course_id)
       end
     end
