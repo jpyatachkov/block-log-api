@@ -1,5 +1,5 @@
 class Solution < ApplicationRecord
-  validates :content, presence: true
+  validates :program, presence: true
 
   belongs_to :assignment
   belongs_to :course

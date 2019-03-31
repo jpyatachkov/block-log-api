@@ -1,8 +1,9 @@
 en:
   course_not_found: "Course with given id doesn't exist!"
   unsufficient_rights: "Not enough rights"
-  profileable_type_not_set: "Resource for comment unknown"
-  profileable_id_not_set: "Entity for comment unknown"
+  profileable_not_found: "Entity for comment not found"
+  profileable_type_not_set: "Resource for comment not set"
+  profileable_id_not_set: "Entity id for comment not set"
   commentary_not_found: "Commentary not found"
   course_exist: "Course with given title already exists"
 
