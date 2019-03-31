@@ -49,16 +49,16 @@ module Api
         render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
+      def check_before_show_delete
+        has_proper_role = current_user.has_role?(%i[moderator collaborator], @solution.course) ||
+            Solution.exists?(id: @solution.id, user_id: current_user.id)
+
+        render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
+      end
+
       def set_solution
         @solution = Solution.find_by_id(params[:id])
         render_errors I18n.t(:solution_not_found), status: :not_found if @solution.nil?
-      end
-
-      def check_before_show_delete
-        has_proper_role = current_user.has_role?(%i[moderator collaborator], @solution.course) ||
-                          Solution.exists?(id: @solution.id, user_id: current_user.id)
-
-        render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
       # unused

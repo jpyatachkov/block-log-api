@@ -1,7 +1,7 @@
 module Api
   module V1
     class CoursesController < BaseController
-      before_action :set_course, only: %i[show update destroy]
+      before_action :set_course, only: %i[show update destroy enroll]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
 
@@ -49,9 +49,8 @@ module Api
 
       # POST /course/1/enroll
       def enroll
-        course_user = CourseUser.new(course_id: params[:id], user_id: current_user.id)
+        course_user = CourseUser.new(course_id: @course.id, user_id: current_user.id)
 
-        ## RENDER WHAT???
         if course_user.save
           render json: course_user
         else
@@ -73,7 +72,7 @@ module Api
 
       def set_course
         @course = Course.find_by_id(params[:id])
-        render_errors I18n.t(:course_not_found), status: :not_found if @course.nil?
+        render_errors I18n.t(:course_not_found), status: :not_found if @course.nil? || !@course.is_active
       end
 
       def course_params
