@@ -62,6 +62,7 @@ module Api
       def assignment_params
         params.require(:assignment).permit(
           :text,
+          :program,
           tests: {
             inputs: [],
             outputs: []
