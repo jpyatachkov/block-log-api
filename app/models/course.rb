@@ -15,13 +15,10 @@ class Course < ApplicationRecord
   end
 
   def save
-    begin
-      super
-    rescue ActiveRecord::RecordNotUnique => e
-      logger.error e
-      @errors.add(:title, I18n.t(:course_exist))
-      return false
-    end
+    super
+  rescue ActiveRecord::RecordNotUnique
+    @errors.add(:title, I18n.t(:course_exist))
+    false
   end
 
   protected

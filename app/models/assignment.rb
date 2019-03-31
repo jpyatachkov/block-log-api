@@ -10,6 +10,11 @@ class Assignment < ApplicationRecord
 
   after_create :add_user_assignment_link
 
+  def destroy
+    self.is_active = false
+    save
+  end
+
   protected
 
   def add_user_assignment_link
