@@ -57,7 +57,7 @@ module Api
         render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 
-      def resolve_profileable_type
+      def resolve_profileable_type(hash)
         case hash['profileable_type']
         when 'course'
           Course
@@ -70,7 +70,7 @@ module Api
 
       def search_profileable(hash)
         @profileable_id = hash['profileable_id']
-        @profileable_type = resolve_profileable_type
+        @profileable_type = resolve_profileable_type hash
 
         # crutch for before action
         if @profileable_type.nil?
@@ -87,14 +87,13 @@ module Api
 
       def set_profileable_create
         comment = params.require(:commentary).permit(:profileable_type, :profileable_id)
-
         search_profileable comment
 
         render_errors @error unless @error.nil?
       end
 
       def set_commentary
-        @commentary = Commentary.find_by_id(params[:id])
+        @commentary = Commentary.where(id: params[:id], is_active: true).first
         render_errors I18n.t(:commentary_not_found), status: :not_found if @commentary.nil?
       end
 
