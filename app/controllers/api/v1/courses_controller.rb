@@ -5,17 +5,24 @@ module Api
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
 
+      # if i'm owner + helper or is_visible true
       # GET /courses
-      def index
-        paginate Course.where(is_active: true)
-      end
-
-      def index_mine
-        ids = current_user.roles.where(resource_type: :Course)
+      def my_courses(rights)
+        ids = current_user.roles.where(resource_type: :Course, name: rights)
                           .where.not(resource_id: nil)
                           .select(:resource_id)
                           .map(&:resource_id)
-        paginate Course.where(id: ids, is_active: true)
+      end 
+
+      # it works
+      def index
+        paginate Course.where(id: my_courses(%i[moderator collaborator]), is_active: true)
+                       .or(Course.where(is_visible: true))
+                       .distinct
+      end
+
+      def index_mine
+        paginate Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true)
       end
 
       # GET /courses/1
