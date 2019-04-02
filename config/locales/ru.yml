@@ -159,6 +159,7 @@ ru:
   solution_not_found: "Решение не существует"
   user_unauthorized: "Вы не авторизованы"
   course_exist: "Курс с таким заголовком существует"
+  not_found: "Не найдено"
   
   activerecord:
     errors:

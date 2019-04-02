@@ -63,7 +63,7 @@ module Api
       def set_assignment
         @assignment = Assignment.find_by_id(params[:id])
         render_errors I18n.t(:assignment_not_found), status: :not_found if @assignment.nil? || !@assignment.is_active ||
-                                                                           !@assignment.course.visible
+                                                                           !@assignment.course.visible(current_user)
       end
 
       def assignment_params
