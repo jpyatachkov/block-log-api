@@ -22,6 +22,10 @@ class Course < ApplicationRecord
     false
   end
 
+  def visible(user)
+    is_visible ? true : user.has_role?(%i[moderator collaborator], self)
+  end
+
   protected
 
   def set_user_permissions

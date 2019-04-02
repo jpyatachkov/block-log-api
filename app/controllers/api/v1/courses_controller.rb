@@ -8,11 +8,11 @@ module Api
       # if i'm owner + helper or is_visible true
       # GET /courses
       def my_courses(rights)
-        ids = current_user.roles.where(resource_type: :Course, name: rights)
-                          .where.not(resource_id: nil)
-                          .select(:resource_id)
-                          .map(&:resource_id)
-      end 
+        current_user.roles.where(resource_type: :Course, name: rights)
+                    .where.not(resource_id: nil)
+                    .select(:resource_id)
+                    .map(&:resource_id)
+      end
 
       # it works
       def index
@@ -79,7 +79,8 @@ module Api
 
       def set_course
         @course = Course.find_by_id(params[:id])
-        render_errors I18n.t(:course_not_found), status: :not_found if @course.nil? || !@course.is_active
+        render_errors I18n.t(:course_not_found), status: :not_found if @course.nil? || !@course.is_active ||
+                                                                       !@course.visible(current_user)
       end
 
       def course_params
