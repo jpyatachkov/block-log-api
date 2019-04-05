@@ -6,6 +6,11 @@ class Solution < ApplicationRecord
 
   has_many :commentary
 
+  def self.get_course(id)
+    solution = Solution.find_by_id(id)
+    solution.nil? ? nil : solution.course
+  end
+
   def self.find_all(assignment_id, current_user)
     assignment = Assignment.find(assignment_id)
 

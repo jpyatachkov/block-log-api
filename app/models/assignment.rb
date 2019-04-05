@@ -16,6 +16,11 @@ class Assignment < ApplicationRecord
     save
   end
 
+  def self.get_course(id)
+    assignment = Assignment.find_by_id(id)
+    assignment.nil? ? nil : assignment.course
+  end
+
   protected
 
   def add_user_assignment_link

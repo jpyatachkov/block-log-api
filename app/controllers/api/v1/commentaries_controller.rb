@@ -3,6 +3,7 @@ module Api
     class CommentariesController < BaseController
       before_action :set_profileable_index, only: %i[index]
       before_action :set_profileable_create, only: %i[create]
+      before_action :check_visible_course, only: %i[create index]
       before_action :set_commentary, only: %i[show update destroy]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
@@ -45,6 +46,11 @@ module Api
       end
 
       private
+
+      def check_visible_course
+        @course = @profileable_type.get_course(@profileable_id)
+        render_errors I18n.t(:not_found), status: :not_found unless @course.visible(current_user)
+      end
 
       def check_rights_before_create
         has_proper_role = current_user.has_role? %i[moderator collaborator user], Course
@@ -94,7 +100,7 @@ module Api
 
       def set_commentary
         @commentary = Commentary.where(id: params[:id], is_active: true).first
-        render_errors I18n.t(:commentary_not_found), status: :not_found if @commentary.nil?
+        render_errors I18n.t(:commentary_not_found), status: :not_found if @commentary.nil? || !@commentary.course.visible(current_user)
       end
 
       def commentary_params_update
