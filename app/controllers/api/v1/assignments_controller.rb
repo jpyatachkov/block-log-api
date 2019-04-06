@@ -19,6 +19,7 @@ module Api
       # POST /assignments
       def create
         @assignment = Assignment.new(assignment_params)
+        p @assignment.tests
 
         if @assignment.save
           render 'api/v1/assignments/show',
@@ -71,10 +72,7 @@ module Api
           :title,
           :description,
           :program,
-          tests: {
-            inputs: [],
-            outputs: []
-          }
+          tests: [{ input_array: [], output_array: [] }]
         ).merge(course_id: params[:course_id], user_id: current_user.id)
       end
     end

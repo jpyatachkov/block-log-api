@@ -9,7 +9,7 @@ module Api
       # GET /solutions
       def index
         # we can see solution by u_id and ex_id
-        # logic with acess rights implemented in find_all
+        # logic with access rights implemented in find_all
         paginate Solution.find_all(params[:assignment_id], current_user)
       end
 
@@ -77,7 +77,7 @@ module Api
       end
 
       def solution_params_create
-        solution = params.require(:solution).permit(:program, :assignment_id)
+        solution = params.require(:solution).permit(:program, :assignment_id, :is_correct)
         solution.merge(user_id: current_user.id, course_id: @assignment.course_id)
       end
     end
