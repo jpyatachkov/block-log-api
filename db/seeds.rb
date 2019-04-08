@@ -26,11 +26,13 @@ creator_ids = [alexander.id, maxim.id]
   current_user_id = creator_ids.sample(1).first
 
   course = Course.create title: Faker::Lorem.sentence,
+                         short_description: Faker::Lorem.paragraph,
                          description: Faker::Lorem.paragraph,
                          user_id: current_user_id
 
-  Faker::Number.between(7, 19).times do
-    Assignment.create text: Faker::Lorem.paragraph,
+  Faker::Number.between(3, 29).times do
+    Assignment.create title: Faker::Lorem.word,
+                      description: Faker::Lorem.paragraph,
                       course_id: course.id,
                       user_id: current_user_id
   end
