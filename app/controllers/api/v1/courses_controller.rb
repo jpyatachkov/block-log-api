@@ -27,6 +27,11 @@ module Api
 
       # GET /courses/1
       def show
+        @user_roles = current_user.roles
+                          .select(:name)
+                          .where(resource_type: :Course, resource_id: @course.id)
+                          .map(&:name)
+        @user_roles = nil if @user_roles.empty?
         @course
       end
 
