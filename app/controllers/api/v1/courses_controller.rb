@@ -17,7 +17,7 @@ module Api
       # it works
       def index
         paginate Course.where(id: my_courses(%i[moderator collaborator]), is_active: true)
-                       .or(Course.where(is_visible: true))
+                       .or(Course.where(is_active: true, is_visible: true))
                        .distinct
       end
 
