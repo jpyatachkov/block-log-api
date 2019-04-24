@@ -1,5 +1,6 @@
 class CourseUser < ApplicationRecord
   validates :user_id, uniqueness: { scope: :course_id }
+  # scope :passed_tests, ->(user_id) { where("user_id=?", user_id)}
   belongs_to :user
   belongs_to :course
 

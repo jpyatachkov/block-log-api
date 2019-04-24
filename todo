@@ -1,3 +1,28 @@
+NAHUI NAM BYL NUZHEN ASSUGNMENTUSERS
+
+4) AFTER CREATE SOLUTION 
+        set course passed if 
+                get assignments active, get all solution ids, 
+                if arr equals then passed else not
+
+        set count tries to assignment if broken or not
+        set correct if correct, rewrites previous value
+
+
+5) Assignments list, one todo as course
+        joins with table assignments_users,
+        with user and assignment
+        gets all info passed, not passed, count tries
+
+
+AFTER THAT LOOK HOW TO GET IMAGE and define path to store
+nginx cfg also refactor
+
+THAN add sideqik and redis to generate hashes for user like user_id, hash
+if that link passed -> user sets activated
+
+AFTER sorting assignmentss
+
 1) Fix permit params in model, dont fix require
 2) 
 

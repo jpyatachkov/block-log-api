@@ -14,15 +14,29 @@ module Api
                     .map(&:resource_id)
       end
 
-      # it works
-      def index
-        paginate Course.where(id: my_courses(%i[moderator collaborator]), is_active: true)
-                       .or(Course.where(is_active: true, is_visible: true))
-                       .distinct
+      def get_extended_course(collection)
+        collection
+          .joins("LEFT JOIN course_users on courses.id = course_users.course_id and course_users.user_id = #{current_user.id}")
+          .select('courses.*, course_users.count_passed, course_users.passed')
       end
 
-      def index_mine
-        paginate Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true)
+      # it works
+      def index
+        paginate get_extended_course(
+                  Course.where(id: my_courses(%i[moderator collaborator]), is_active: true)
+                       .or(Course.where(is_active: true, is_visible: true))
+                       .distinct
+                  )
+      end
+
+      def index_mine_inactive
+        paginate get_extended_course(Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true))
+                 .where('course_users.passed = false')
+      end
+
+      def index_mine_active
+        paginate get_extended_course(Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true))
+                 .where('course_users.passed = true')
       end
 
       # GET /courses/1
@@ -83,13 +97,13 @@ module Api
       end
 
       def set_course
-        @course = Course.find_by_id(params[:id])
+        @course = get_extended_course(Course).find_by_id(params[:id])
         render_errors I18n.t(:course_not_found), status: :not_found if @course.nil? || !@course.is_active ||
                                                                        !@course.visible(current_user)
       end
 
       def course_params
-        params.require(:course).permit(:title, :short_description, :description)
+        params.require(:course).permit(:title, :short_description, :description, :requirements, :complexity)
       end
     end
   end

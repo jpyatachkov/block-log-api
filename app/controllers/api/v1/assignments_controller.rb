@@ -6,9 +6,16 @@ module Api
       before_action :check_rights_before_create_update, only: %i[create update]
       before_action :check_rights_before_destroy, only: %i[destroy]
 
+      def get_extended_assignment(collection)
+        collection
+          .joins("LEFT JOIN assignment_solutions on assignments.id = assignment_solutions.assignment_id")
+          .where('assignment_solutions.user_id = ?', current_user.id)
+          .select('assignments.*, assignment_solutions.count_attempts, assignment_solutions.is_correct')
+      end
+
       # GET /assignments
       def index
-        paginate Assignment.all.where(course_id: params[:course_id], is_active: true)
+        paginate get_extended_assignment(Assignment.all.where(course_id: params[:course_id], is_active: true))
       end
 
       # GET /assignments/1
@@ -62,7 +69,7 @@ module Api
       end
 
       def set_assignment
-        @assignment = Assignment.find_by_id(params[:id])
+        @assignment = get_extended_assignment(Assignment).find_by_id(params[:id])
         render_errors I18n.t(:assignment_not_found), status: :not_found if @assignment.nil? || !@assignment.is_active ||
                                                                            !@assignment.course.visible(current_user)
       end

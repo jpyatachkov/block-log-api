@@ -9,10 +9,13 @@ class Assignment < ApplicationRecord
 
   belongs_to :course
 
+  after_create :increment_course_assignmetns
   after_create :add_user_assignment_link
 
   def destroy
     self.is_active = false
+    course.count_assignments -= 1 
+    course.save
     save
   end
 
@@ -23,7 +26,12 @@ class Assignment < ApplicationRecord
 
   protected
 
+  def increment_course_assignmetns
+    course.count_assignments += 1
+    course.save
+  end
+
   def add_user_assignment_link
-    AssignmentUser.create!(user: User.find(user_id), assignment: self)
+    AssignmentUser.create!(user: User.find(user_id), assignment: self, course_id: course.id)
   end
 end

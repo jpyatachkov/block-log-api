@@ -7,8 +7,12 @@ Rails.application.routes.draw do
       post 'users/register'
       get 'users/me'
       post 'user_token' => 'user_token#create'
-
-      get 'courses/mine' => 'courses#index_mine'
+      
+      scope 'courses/mine' do 
+        get '/active' => 'courses#index_mine_active'
+        get '/inactive' => 'courses#index_mine_inactive'
+      end
+      
       post 'courses/:id/enroll' => 'courses#enroll'
 
       resources :courses do
