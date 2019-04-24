@@ -53,12 +53,16 @@ module Api
       def create
         @course = Course.new(course_params.merge(user_id: current_user.id))
         if @course.save
+          @course_additional_info = @course.course_users.where(user_id: current_user.id).first
           render 'api/v1/courses/show', status: :created, location: api_v1_course_url(@course)
         else
           render_errors @course.errors
         end
       end
 
+
+      # check update, because i dont knwo behaviour if we have 
+      # joined record
       # PATCH/PUT /courses/1
       def update
         if @course.update(course_params)
@@ -97,9 +101,13 @@ module Api
       end
 
       def set_course
-        @course = get_extended_course(Course).find_by_id(params[:id])
+        @course = Course.find_by_id(params[:id])#@get_extended_course(Course).find_by_id(params[:id])
         render_errors I18n.t(:course_not_found), status: :not_found if @course.nil? || !@course.is_active ||
                                                                        !@course.visible(current_user)
+        @course_additional_info = @course.course_users.where(user_id: current_user.id).first
+        if @course_additional_info.nil?
+          @course_additional_info = CourseUser.new()
+        end
       end
 
       def course_params

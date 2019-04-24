@@ -1,4 +1,11 @@
-NAHUI NAM BYL NUZHEN ASSUGNMENTUSERS
+1) Assignment users remake queries in assignment
+2) Also check woking solutions
+3) Need to refactor views, but i dont know how, what is need
+4) not good lifehack when i get course by id and joins it with other table what behaviour will be on update and destroy
+5) what we need to get when we see after update
+VIEHI POSHLI PO PIZDE 
+TODO REFACTOR THEM
+Extract one base part (min references
 
 4) AFTER CREATE SOLUTION 
         set course passed if 

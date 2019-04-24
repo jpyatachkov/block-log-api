@@ -10,24 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_23_232902) do
+ActiveRecord::Schema.define(version: 2019_04_24_033704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "assignment_solutions", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "assignment_id"
-    t.bigint "solution_id", default: 0
-    t.integer "count_attempts", default: 0
-    t.integer "integer"
-    t.integer "course_id"
-    t.boolean "is_correct", default: false
-    t.boolean "boolean", default: false
-    t.index ["assignment_id"], name: "index_assignment_solutions_on_assignment_id"
-    t.index ["solution_id"], name: "index_assignment_solutions_on_solution_id"
-    t.index ["user_id"], name: "index_assignment_solutions_on_user_id"
-  end
 
   create_table "assignment_users", force: :cascade do |t|
     t.bigint "user_id"
@@ -35,6 +21,10 @@ ActiveRecord::Schema.define(version: 2019_04_23_232902) do
     t.integer "assignment_mark", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "count_attempts", default: 0
+    t.integer "course_id"
+    t.boolean "is_correct", default: false
+    t.integer "solution_id"
     t.index ["assignment_id"], name: "index_assignment_users_on_assignment_id"
     t.index ["user_id"], name: "index_assignment_users_on_user_id"
   end
@@ -141,8 +131,6 @@ ActiveRecord::Schema.define(version: 2019_04_23_232902) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
-  add_foreign_key "assignment_solutions", "assignments"
-  add_foreign_key "assignment_solutions", "users"
   add_foreign_key "assignment_users", "assignments"
   add_foreign_key "assignment_users", "users"
   add_foreign_key "assignments", "courses"
