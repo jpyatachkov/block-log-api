@@ -31,12 +31,12 @@ module Api
 
       def index_mine_inactive
         paginate get_extended_course(Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true))
-                 .where('course_users.passed = false')
+                 .where('course_users.passed = true')
       end
 
       def index_mine_active
         paginate get_extended_course(Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true))
-                 .where('course_users.passed = true')
+                 .where('course_users.passed = false')
       end
 
       # GET /courses/1
@@ -59,10 +59,7 @@ module Api
           render_errors @course.errors
         end
       end
-
-
-      # check update, because i dont knwo behaviour if we have 
-      # joined record
+      
       # PATCH/PUT /courses/1
       def update
         if @course.update(course_params)
@@ -101,12 +98,13 @@ module Api
       end
 
       def set_course
-        @course = Course.find_by_id(params[:id])#@get_extended_course(Course).find_by_id(params[:id])
+        @course = Course.find_by_id(params[:id])
         render_errors I18n.t(:course_not_found), status: :not_found if @course.nil? || !@course.is_active ||
                                                                        !@course.visible(current_user)
+        
         @course_additional_info = @course.course_users.where(user_id: current_user.id).first
         if @course_additional_info.nil?
-          @course_additional_info = CourseUser.new()
+          @course_additional_info = CourseUser.new
         end
       end
 

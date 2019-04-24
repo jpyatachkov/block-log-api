@@ -35,30 +35,33 @@ class Solution < ApplicationRecord
                                                 assignment_id: assignment_id,
                                                 course_id: course_id)
     else
-      old = assignment_user.is_correct
+      already_correct = assignment_user.is_correct
     end
+    p already_correct
 
     assignment_user.count_attempts += 1
+
     if is_correct
+      assignment_user.is_correct = true
       assignment_user.solution_id = id
+    end
+    assignment_user.save
 
-      if !already_correct
-        assignment_user.is_correct = true
-        check_course_state
-      end
-    end 
-
-    assignment_user.save()
+    if is_correct && !already_correct
+      check_course_state
+    end
   end
 
   def check_course_state
     course_assignments = Assignment.where(course_id: course.id, is_active: true).select(:id).map(&:id)
-    passed_assignments = AssignmentUser.where(course_id: course_id, user_id: user_id).select(:assignment_id).map(&:assignment_id)
+    
+    passed_assignments = AssignmentUser.where(course_id: course_id, user_id: user_id, is_correct: true)
+                                       .select(:assignment_id).map(&:assignment_id)
 
     course_assignments -= passed_assignments
 
     course_user = CourseUser.where(user: user_id, course: course_id).first
-    course_user.count_passed = passed_assignments.size()
+    course_user.count_passed = passed_assignments.size
 
     if course_assignments.empty?
       course_user.passed = true

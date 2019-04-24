@@ -2,6 +2,7 @@ class Assignment < ApplicationRecord
   resourcify
 
   has_many :commentary
+  has_many :assignment_users
 
   validates :title, presence: true
   validates :description, presence: true

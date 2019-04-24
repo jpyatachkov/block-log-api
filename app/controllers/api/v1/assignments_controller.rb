@@ -8,9 +8,9 @@ module Api
 
       def get_extended_assignment(collection)
         collection
-          .joins("LEFT JOIN assignment_solutions on assignments.id = assignment_solutions.assignment_id")
-          .where('assignment_solutions.user_id = ?', current_user.id)
-          .select('assignments.*, assignment_solutions.count_attempts, assignment_solutions.is_correct')
+          .joins('LEFT JOIN assignment_users on assignments.id = assignment_users.assignment_id')
+          .where('assignment_users.user_id = ?', current_user.id)
+          .select('assignments.*, assignment_users.count_attempts, assignment_users.is_correct')
       end
 
       # GET /assignments
@@ -29,6 +29,7 @@ module Api
         p @assignment.tests
 
         if @assignment.save
+          @assignment_additional_info = @assignment.assignment_users.where(user_id: current_user.id).first
           render 'api/v1/assignments/show',
                  status: :created,
                  location: api_v1_course_assignment_url(@assignment.course, @assignment)
@@ -69,9 +70,15 @@ module Api
       end
 
       def set_assignment
-        @assignment = get_extended_assignment(Assignment).find_by_id(params[:id])
+        @assignment = Assignment.find_by_id(params[:id])
         render_errors I18n.t(:assignment_not_found), status: :not_found if @assignment.nil? || !@assignment.is_active ||
                                                                            !@assignment.course.visible(current_user)
+        
+        @assignment_additional_info = @assignment.assignment_users.where(user_id: current_user.id).first
+        
+        if @assignment_additional_info.nil?
+          @assignment_additional_info = AssignmentUser.new()
+        end
       end
 
       def assignment_params
