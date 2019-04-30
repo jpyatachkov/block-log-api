@@ -20,6 +20,7 @@ class Assignment < ApplicationRecord
     course.save   
     save
 
+    # this may not correct
     course_users.each do |course_user| 
       Solution.check_course_state(course_id, course_user.user)
     end
@@ -34,6 +35,7 @@ class Assignment < ApplicationRecord
 
   def increment_course_assignmetns
     course.count_assignments += 1
+    ###
     CourseUser.where(course_id: course_id).update_all(passed: false)
     course.save
   end
