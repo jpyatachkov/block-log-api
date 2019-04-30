@@ -2,10 +2,13 @@ class Course < ApplicationRecord
   resourcify
 
   has_many :commentary
+  has_many :course_users
 
   validates :title, presence: true
   validates :short_description, presence: true
   validates :description, presence: true
+  validates :requirements, presence: true
+  validates :complexity, presence: true, inclusion: 1..5
 
   after_create :set_user_permissions,
                :add_user_course_link
@@ -14,6 +17,7 @@ class Course < ApplicationRecord
     self.is_active = false
     save
   end
+
 
   def save
     super
@@ -31,6 +35,7 @@ class Course < ApplicationRecord
   end
 
   protected
+
 
   def set_user_permissions
     user = User.find(user_id)

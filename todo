@@ -1,3 +1,47 @@
+  # if assignment added to course we need to update course state
+  # by get course users ids and then for each user we need to set this thing to 
+  # get course users
+  # get assignments active 
+  # for all AssignmentUser by course and user check_course_state
+  # think how to do this correct 
+
+  course image
+      # check update, because i dont knwo behaviour if we have 
+      # joined record
+
+1) Assignment users remake queries in assignment
+2) Also check woking solutions
+3) Need to refactor views, but i dont know how, what is need
+4) not good lifehack when i get course by id and joins it with other table what behaviour will be on update and destroy
+5) what we need to get when we see after update
+
+Extract one base part (min references
+
+4) AFTER CREATE SOLUTION 
+        set course passed if 
+                get assignments active, get all solution ids, 
+                if arr equals then passed else not
+
+        set count tries to assignment if broken or not
+        set correct if correct, rewrites previous value
+
+
+5) Assignments list, one todo as course
+        joins with table assignments_users,
+        with user and assignment
+        gets all info passed, not passed, count tries
+
+UPDATE AssignmentUsers set passed = false ;
+
+UPDATE CourseUsers set passed = (CASE WHEN SELECT COUNT = )
+AFTER THAT LOOK HOW TO GET IMAGE and define path to store
+nginx cfg also refactor
+
+THAN add sideqik and redis to generate hashes for user like user_id, hash
+if that link passed -> user sets activated
+
+AFTER sorting assignmentss
+
 1) Fix permit params in model, dont fix require
 2) 
 

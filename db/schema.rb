@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_02_193244) do
+ActiveRecord::Schema.define(version: 2019_04_24_033704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,10 @@ ActiveRecord::Schema.define(version: 2019_04_02_193244) do
     t.integer "assignment_mark", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "count_attempts", default: 0
+    t.integer "course_id"
+    t.boolean "is_correct", default: false
+    t.integer "solution_id"
     t.index ["assignment_id"], name: "index_assignment_users_on_assignment_id"
     t.index ["user_id"], name: "index_assignment_users_on_user_id"
   end
@@ -60,6 +64,8 @@ ActiveRecord::Schema.define(version: 2019_04_02_193244) do
     t.integer "course_mark", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "passed", default: false
+    t.integer "count_passed", default: 0
     t.index ["course_id"], name: "index_course_users_on_course_id"
     t.index ["user_id", "course_id"], name: "index_course_users_on_user_id_and_course_id", unique: true
     t.index ["user_id"], name: "index_course_users_on_user_id"
@@ -73,7 +79,11 @@ ActiveRecord::Schema.define(version: 2019_04_02_193244) do
     t.bigint "user_id"
     t.boolean "is_active", default: true
     t.text "short_description"
-    t.boolean "is_visible", default: false
+    t.boolean "is_visible", default: true
+    t.string "requirements"
+    t.integer "complexity"
+    t.integer "count_assignments", default: 0
+    t.index ["complexity"], name: "index_courses_on_complexity"
     t.index ["title", "is_active"], name: "index_courses_on_title_and_is_active", unique: true, where: "(is_active IS TRUE)"
     t.index ["user_id"], name: "index_courses_on_user_id"
   end
