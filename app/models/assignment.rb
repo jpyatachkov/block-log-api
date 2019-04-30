@@ -15,9 +15,14 @@ class Assignment < ApplicationRecord
 
   def destroy
     self.is_active = false
-    course.count_assignments -= 1 
-    course.save
+    course.count_assignments -= 1
+    course_users = CourseUser.where(course_id: course_id)
+    course.save   
     save
+
+    course_users.each do |course_user| 
+      Solution.check_course_state(course_id, course_user.user)
+    end
   end
 
   def self.get_course(id)
@@ -29,6 +34,7 @@ class Assignment < ApplicationRecord
 
   def increment_course_assignmetns
     course.count_assignments += 1
+    CourseUser.where(course_id: course_id).update_all(passed: false)
     course.save
   end
 

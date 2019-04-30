@@ -1,4 +1,11 @@
+  # if assignment added to course we need to update course state
+  # by get course users ids and then for each user we need to set this thing to 
+  # get course users
+  # get assignments active 
+  # for all AssignmentUser by course and user check_course_state
+  # think how to do this correct 
 
+  course image
       # check update, because i dont knwo behaviour if we have 
       # joined record
 
@@ -24,7 +31,9 @@ Extract one base part (min references
         with user and assignment
         gets all info passed, not passed, count tries
 
+UPDATE AssignmentUsers set passed = false ;
 
+UPDATE CourseUsers set passed = (CASE WHEN SELECT COUNT = )
 AFTER THAT LOOK HOW TO GET IMAGE and define path to store
 nginx cfg also refactor
 

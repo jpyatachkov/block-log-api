@@ -2,6 +2,7 @@ module Api
   module V1
     class CoursesController < BaseController
       before_action :set_course, only: %i[show update destroy enroll]
+      before_action :set_course_additional_info, only: %i[show update enroll]
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
 
@@ -16,8 +17,10 @@ module Api
 
       def get_extended_course(collection)
         collection
-          .joins("LEFT JOIN course_users on courses.id = course_users.course_id and course_users.user_id = #{current_user.id}")
+          .joins('LEFT JOIN course_users on courses.id = course_users.course_id')
+          .where('course_users.user_id = ?',  current_user.id)
           .select('courses.*, course_users.count_passed, course_users.passed')
+          # .joins("LEFT JOIN course_users on courses.id = course_users.course_id and course_users.user_id = #{current_user.id}")
       end
 
       # it works
@@ -31,12 +34,12 @@ module Api
 
       def index_mine_inactive
         paginate get_extended_course(Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true))
-                 .where('course_users.passed = true')
+                 .where('course_users.passed = ?', true), 'api/v1/courses/index'
       end
 
       def index_mine_active
         paginate get_extended_course(Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true))
-                 .where('course_users.passed = false')
+                 .where('course_users.passed = ?', false), 'api/v1/courses/index'
       end
 
       # GET /courses/1
@@ -101,7 +104,9 @@ module Api
         @course = Course.find_by_id(params[:id])
         render_errors I18n.t(:course_not_found), status: :not_found if @course.nil? || !@course.is_active ||
                                                                        !@course.visible(current_user)
-        
+      end
+
+      def set_course_additional_info
         @course_additional_info = @course.course_users.where(user_id: current_user.id).first
         if @course_additional_info.nil?
           @course_additional_info = CourseUser.new

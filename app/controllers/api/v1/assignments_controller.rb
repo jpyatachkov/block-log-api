@@ -2,6 +2,7 @@ module Api
   module V1
     class AssignmentsController < BaseController
       before_action :set_assignment, only: %i[show update destroy]
+      before_action :set_assignment_additional_info, only: %i[show update]
       before_action :check_course_main, only: %i[creata index]
       before_action :check_rights_before_create_update, only: %i[create update]
       before_action :check_rights_before_destroy, only: %i[destroy]
@@ -73,7 +74,9 @@ module Api
         @assignment = Assignment.find_by_id(params[:id])
         render_errors I18n.t(:assignment_not_found), status: :not_found if @assignment.nil? || !@assignment.is_active ||
                                                                            !@assignment.course.visible(current_user)
-        
+      end
+
+      def set_assignment_additional_info
         @assignment_additional_info = @assignment.assignment_users.where(user_id: current_user.id).first
         
         if @assignment_additional_info.nil?

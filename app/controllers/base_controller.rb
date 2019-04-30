@@ -6,9 +6,10 @@ class BaseController < ProtectedController
   DEFAULT_PAGE_NUMBER = 1
   DEFAULT_PAGE_SIZE = 20
 
-  def paginate(collection)
+  def paginate(collection, view = nil)
     @items = collection.order(@order).page(@page).per(@size)
     @total_pages = @items.total_pages
+    return render view unless view.nil?
   end
 
   def set_pagination_params
