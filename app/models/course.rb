@@ -18,7 +18,6 @@ class Course < ApplicationRecord
     save
   end
 
-
   def save
     super
   rescue ActiveRecord::RecordNotUnique
