@@ -29,12 +29,15 @@ class Course < ApplicationRecord
     is_visible ? true : user.has_role?(%i[moderator collaborator], self)
   end
 
+  def author
+    User.find_by_id(user_id)
+  end
+
   def self.get_course(id)
     Course.find_by_id(id)
   end
 
   protected
-
 
   def set_user_permissions
     user = User.find(user_id)

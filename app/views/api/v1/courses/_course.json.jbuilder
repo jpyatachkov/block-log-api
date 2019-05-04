@@ -15,4 +15,5 @@ if @course_additional_info.nil?
 else
   json.count_passed @course_additional_info.count_passed
   json.passed @course_additional_info.passed
-end 
+end
+json.partial! '/api/v1/users/user', user: course.author
