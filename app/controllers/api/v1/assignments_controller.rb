@@ -9,9 +9,9 @@ module Api
 
       def get_extended_assignment(collection)
         collection
-          .joins('LEFT JOIN assignment_users on assignments.id = assignment_users.assignment_id')
-          .where('assignment_users.user_id = ?', current_user.id)
-          .select('assignments.*, assignment_users.count_attempts, assignment_users.is_correct')
+            .joins('LEFT JOIN assignment_users on assignments.id = assignment_users.assignment_id')
+            .where('assignment_users.user_id = ?', current_user.id)
+            .select('assignments.*, assignment_users.count_attempts, assignment_users.is_correct')
       end
 
       # GET /assignments
@@ -73,12 +73,12 @@ module Api
       def set_assignment
         @assignment = Assignment.find_by_id(params[:id])
         render_errors I18n.t(:assignment_not_found), status: :not_found if @assignment.nil? || !@assignment.is_active ||
-                                                                           !@assignment.course.visible(current_user)
+            !@assignment.course.visible(current_user)
       end
 
       def set_assignment_additional_info
         @assignment_additional_info = @assignment.assignment_users.where(user_id: current_user.id).first
-        
+
         if @assignment_additional_info.nil?
           @assignment_additional_info = AssignmentUser.new()
         end
@@ -86,10 +86,10 @@ module Api
 
       def assignment_params
         params.require(:assignment).permit(
-          :title,
-          :description,
-          :program,
-          tests: [{ input_array: [], output_array: [] }]
+            :title,
+            :description,
+            :program,
+            tests: [{ input_array: [], output_array: [] }]
         ).merge(course_id: params[:course_id], user_id: current_user.id)
       end
     end

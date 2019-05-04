@@ -59,7 +59,7 @@ module Api
 
       def check_rights_before_update_destroy
         has_proper_role = current_user.has_role?(%i[moderator collaborator], @commentary.course) ||
-                          Commentary.exists?(id: @commentary.id, user_id: current_user.id)
+            Commentary.exists?(id: @commentary.id, user_id: current_user.id)
         render_errors I18n.t(:unsufficient_rights), status: :forbidden unless has_proper_role
       end
 

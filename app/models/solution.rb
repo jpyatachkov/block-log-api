@@ -31,13 +31,12 @@ class Solution < ApplicationRecord
     already_correct = false
 
     if assignment_user.nil?
-      assignment_user = AssignmentUser.new(user_id: user_id, 
-                                                assignment_id: assignment_id,
-                                                course_id: course_id)
+      assignment_user = AssignmentUser.new(user_id: user_id,
+                                           assignment_id: assignment_id,
+                                           course_id: course_id)
     else
       already_correct = assignment_user.is_correct
     end
-    p already_correct
 
     assignment_user.count_attempts += 1
 
@@ -47,14 +46,12 @@ class Solution < ApplicationRecord
     end
     assignment_user.save
 
-    if is_correct && !already_correct
-      Solution.check_course_state(course_id, user_id)
-    end
+    check_course_state(course_id, user_id) if is_correct && !already_correct
   end
 
-  def self.check_course_state(c_id, u_id)
+  def check_course_state(c_id, u_id)
     course_assignments = Assignment.where(course_id: c_id, is_active: true).select(:id).map(&:id)
-    
+
     passed_assignments = AssignmentUser.where(course_id: c_id, user_id: u_id, is_correct: true)
                                        .select(:assignment_id).map(&:assignment_id)
 

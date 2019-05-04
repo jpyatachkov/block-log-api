@@ -17,11 +17,11 @@ class Assignment < ApplicationRecord
     self.is_active = false
     course.count_assignments -= 1
     course_users = CourseUser.where(course_id: course_id)
-    course.save   
+    course.save
     save
 
     # this may not correct
-    course_users.each do |course_user| 
+    course_users.each do |course_user|
       Solution.check_course_state(course_id, course_user.user)
     end
   end
