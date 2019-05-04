@@ -10,36 +10,36 @@ module Api
       # GET /courses
       def my_courses(rights)
         current_user.roles.where(resource_type: :Course, name: rights)
-                    .where.not(resource_id: nil)
-                    .select(:resource_id)
-                    .map(&:resource_id)
+            .where.not(resource_id: nil)
+            .select(:resource_id)
+            .map(&:resource_id)
       end
 
       def get_extended_course(collection)
         collection
-          .joins('LEFT JOIN course_users on courses.id = course_users.course_id')
-          .where('course_users.user_id = ?',  current_user.id)
-          .select('courses.*, course_users.count_passed, course_users.passed')
-          # .joins("LEFT JOIN course_users on courses.id = course_users.course_id and course_users.user_id = #{current_user.id}")
+            .joins('LEFT JOIN course_users on courses.id = course_users.course_id')
+            .where('course_users.user_id = ?', current_user.id)
+            .select('courses.*, course_users.count_passed, course_users.passed')
+        # .joins("LEFT JOIN course_users on courses.id = course_users.course_id and course_users.user_id = #{current_user.id}")
       end
 
       # it works
       def index
         paginate get_extended_course(
-                  Course.where(id: my_courses(%i[moderator collaborator]), is_active: true)
-                       .or(Course.where(is_active: true, is_visible: true))
-                       .distinct
-                  )
+                     Course.where(id: my_courses(%i[moderator collaborator]), is_active: true)
+                         .or(Course.where(is_active: true, is_visible: true))
+                         .distinct
+                 )
       end
 
       def index_mine_inactive
         paginate get_extended_course(Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true))
-                 .where('course_users.passed = ?', true), 'api/v1/courses/index'
+                     .where('course_users.passed = ?', true), 'api/v1/courses/index'
       end
 
       def index_mine_active
         paginate get_extended_course(Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true))
-                 .where('course_users.passed = ?', false), 'api/v1/courses/index'
+                     .where('course_users.passed = ?', false), 'api/v1/courses/index'
       end
 
       # GET /courses/1
@@ -62,7 +62,7 @@ module Api
           render_errors @course.errors
         end
       end
-      
+
       # PATCH/PUT /courses/1
       def update
         if @course.update(course_params)
@@ -103,7 +103,7 @@ module Api
       def set_course
         @course = Course.find_by_id(params[:id])
         render_errors I18n.t(:course_not_found), status: :not_found if @course.nil? || !@course.is_active ||
-                                                                       !@course.visible(current_user)
+            !@course.visible(current_user)
       end
 
       def set_course_additional_info
@@ -114,7 +114,12 @@ module Api
       end
 
       def course_params
-        params.require(:course).permit(:title, :short_description, :description, :requirements, :complexity)
+        params.require(:course).permit :title,
+                                       :short_description,
+                                       :description,
+                                       :requirements,
+                                       :complexity,
+                                       :avatar_base64
       end
     end
   end
