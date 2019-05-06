@@ -22,6 +22,8 @@ gem 'devise'
 
 gem 'kaminari' # pagination
 
+gem 'carrierwave', '~> 1.0'
+
 gem 'rolify'
 
 group :development, :test do

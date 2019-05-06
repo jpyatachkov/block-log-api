@@ -15,6 +15,8 @@ Rails.application.routes.draw do
       
       post 'courses/:id/enroll' => 'courses#enroll'
 
+      post 'courses/:id/set_image' => 'courses#set_image'
+
       resources :courses do
         resources :assignments do
           resources :solutions, only: [:index]

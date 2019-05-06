@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_24_033704) do
+ActiveRecord::Schema.define(version: 2019_05_03_010824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 2019_04_24_033704) do
     t.string "requirements"
     t.integer "complexity"
     t.integer "count_assignments", default: 0
+    t.string "image"
     t.index ["complexity"], name: "index_courses_on_complexity"
     t.index ["title", "is_active"], name: "index_courses_on_title_and_is_active", unique: true, where: "(is_active IS TRUE)"
     t.index ["user_id"], name: "index_courses_on_user_id"

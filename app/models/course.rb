@@ -4,6 +4,8 @@ class Course < ApplicationRecord
   has_many :commentary
   has_many :course_users
 
+  mount_uploader :image, CourseImageUploader
+
   validates :title, presence: true
   validates :short_description, presence: true
   validates :description, presence: true
