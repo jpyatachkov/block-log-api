@@ -1,0 +1,1 @@
+$redis = Redis::Namespace.new("email_tokens", :redis => Redis.new)
