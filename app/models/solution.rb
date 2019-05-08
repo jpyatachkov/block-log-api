@@ -23,6 +23,25 @@ class Solution < ApplicationRecord
     end
   end
 
+  def self.check_course_state(c_id, u_id)
+    course_assignments = Assignment.where(course_id: c_id, is_active: true).select(:id).map(&:id)
+
+    passed_assignments = AssignmentUser.where(course_id: c_id, user_id: u_id, is_correct: true)
+                             .select(:assignment_id).map(&:assignment_id)
+
+    assignments_size = course_assignments.size
+    course_assignments -= passed_assignments
+
+    course_user = CourseUser.where(user: u_id, course: c_id).first
+    course_user.count_passed = passed_assignments.size
+
+    if course_assignments.empty?
+      course_user.passed = true
+      course_user.count_passed = assignments_size
+    end
+    course_user.save
+  end
+
   protected
 
   def create_or_update_assignment_solution
@@ -47,24 +66,5 @@ class Solution < ApplicationRecord
     assignment_user.save
 
     check_course_state(course_id, user_id) if is_correct && !already_correct
-  end
-
-  def check_course_state(c_id, u_id)
-    course_assignments = Assignment.where(course_id: c_id, is_active: true).select(:id).map(&:id)
-
-    passed_assignments = AssignmentUser.where(course_id: c_id, user_id: u_id, is_correct: true)
-                                       .select(:assignment_id).map(&:assignment_id)
-
-    assignments_size = course_assignments.size
-    course_assignments -= passed_assignments
-
-    course_user = CourseUser.where(user: u_id, course: c_id).first
-    course_user.count_passed = passed_assignments.size
-
-    if course_assignments.empty?
-      course_user.passed = true
-      course_user.count_passed = assignments_size
-    end
-    course_user.save
   end
 end
