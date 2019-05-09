@@ -100,6 +100,10 @@ Rails.application.configure do
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
+  # used for url_for in view for email
+  config.action_controller.default_url_options = { host: ENV['SITE_URL'] }
+
+
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end

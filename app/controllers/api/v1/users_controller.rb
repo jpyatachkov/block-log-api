@@ -8,6 +8,7 @@ module Api
 
         if @user.save
           token = @user.generate_virify_token
+          # p url_for(controller: 'users', action: 'confirm_email', only_path: false, token: token)
           UsersMailer.welcome_email(@user, token).deliver_later
           render @user, status: :created
         else

@@ -28,9 +28,13 @@ class User < ApplicationRecord
     { sub: id, role: main_roles }
   end
 
+
+  ###############################################################
   def generate_virify_token
     token = SecureRandom.urlsafe_base64.to_s
     $redis.set(token, id)
+    # rescue Redis::CannotConnectError
+      # user.destroy
     token
   end
 
@@ -45,7 +49,8 @@ class User < ApplicationRecord
     # maybe need to check exceptions
     user
   end
-
+  ############################################################
+  
   protected
 
   def self.generate_error_user(key, val)

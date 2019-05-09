@@ -6,7 +6,8 @@
   <body>
     <h1>Добро пожаловать на blocklog.ru, <%= @user.first_name %></h1>
     <p> 
-        Для завершения регистрации пройдите по <a href=<%= @link %>>ссылке</a> 
+        Для завершения регистрации пройдите по 
+        <a href=<%= url_for(controller: 'users', action: 'confirm_email', only_path: false, token: @token) %>>ссылке</a> 
     </p>
     <p>
       Ваш blocklog
