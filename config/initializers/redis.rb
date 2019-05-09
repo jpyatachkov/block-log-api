@@ -1,1 +1,1 @@
-$redis = Redis::Namespace.new("email_tokens", :redis => Redis.new)
+$redis = Redis::Namespace.new("email_tokens", :redis => Redis.new(url: ENV['ACTIVE_JOB_URL']))

@@ -12,8 +12,11 @@ class User < ApplicationRecord
                :process_is_staff_flag
   after_update :process_is_staff_flag
 
+  # think that he can get token, but he cant do anything without confirmation
+  # also if he send incorrect email we need to change it and get new email
   def self.from_token_request(request)
-    find_by(username: request.params.dig('auth', 'username'), is_confirmed: true)
+    find_by_username request.params.dig 'auth', 'username'
+    # find_by(username: request.params.dig('auth', 'username'), is_confirmed: true)
   end
 
   def to_token_payload
@@ -28,6 +31,7 @@ class User < ApplicationRecord
   def generate_virify_token
     token = SecureRandom.urlsafe_base64.to_s
     $redis.set(token, id)
+    token
   end
 
   def self.confirm_email(token) 

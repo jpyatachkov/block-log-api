@@ -1,3 +1,17 @@
+1) Fix Errors when confirm email os not json +
+2) We need to show only personal info when not confirmed email, to change mail
+??? 
+3) add env mail, password and so on
+4) docker compose a) redis b) sidekiq
+
+1) jwt and only front checks state
+2) check before each action user rights ...
+  # config.action_mailer.default_url_options = { :host => "https://blocklog.ru" }
+  # config.action_mailer.delivery_method = :smtp
+
+
+
+
   # if assignment added to course we need to update course state
   # by get course users ids and then for each user we need to set this thing to 
   # get course users

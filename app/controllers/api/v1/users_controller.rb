@@ -7,7 +7,8 @@ module Api
         @user = User.new register_params
 
         if @user.save
-          @user.generate_virify_token
+          token = @user.generate_virify_token
+          UsersMailer.welcome_email(@user, token).deliver_later
           render @user, status: :created
         else
           render_errors @user.errors
@@ -16,6 +17,7 @@ module Api
 
       def confirm_email
         @user = User.confirm_email(params[:token])
+        # todo generate another path for frontend
         if @user.errors.empty?
           render @user, status: 200
         else
