@@ -160,6 +160,8 @@ ru:
   user_unauthorized: "Вы не авторизованы"
   course_exist: "Курс с таким заголовком существует"
   not_found: "Не найдено"
+  redis_error: "Проблемы на сервере, попробуйте позже"
+  invalid_token: "Токен устарел, пожалуйста запросите новый"
   
   activerecord:
     errors:

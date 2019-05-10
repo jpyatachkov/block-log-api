@@ -4,7 +4,7 @@ module Api
       def welcome_email(user, token)
         @user = user
         @token = token
-        mail(:to => @user.email, :subject => "Добро пожаловать")
+        mail(to: @user.email, subject: "Добро пожаловать")
       end
     end
   end

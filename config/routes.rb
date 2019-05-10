@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get 'users/confirm_email/:token' => 'users#confirm_email'
+      get 'users/reset_confirm_token' => 'users#reset_confirm_token'
       post 'users/register'
       get 'users/me'
       post 'user_token' => 'user_token#create'

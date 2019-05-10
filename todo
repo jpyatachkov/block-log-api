@@ -1,5 +1,10 @@
-1) если отвалился редис удалять запись или что-то еще 
+0) set token lifetime as env var
+1) удалить return попробовать проверить user register redis on/off
+2) reset token redis on/off
+3) confirm email redis on/off incorrect token
+4) run in prod version
 
+1) если отвалился редис удалять запись или что-то еще 
 1) Fix Errors when confirm email os not json +
 2) We need to show only personal info when not confirmed email, to change mail
 ??? 

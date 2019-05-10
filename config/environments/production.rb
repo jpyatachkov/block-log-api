@@ -101,7 +101,7 @@ Rails.application.configure do
   end
 
   # used for url_for in view for email
-  config.action_controller.default_url_options = { host: ENV['SITE_URL'] }
+  # config.action_controller.default_url_options = { host: ENV['SITE_URL'] }
 
 
   # Do not dump schema after migrations.

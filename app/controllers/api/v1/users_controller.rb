@@ -7,23 +7,44 @@ module Api
         @user = User.new register_params
 
         if @user.save
-          token = @user.generate_virify_token
-          # p url_for(controller: 'users', action: 'confirm_email', only_path: false, token: token)
-          UsersMailer.welcome_email(@user, token).deliver_later
-          render @user, status: :created
+          token = generate_token(@user.id, logger)
+          if token.nil?
+            render_errors I18n.t(:redis_error), status: :internal_server_error
+          else
+            UsersMailer.welcome_email(@user, token).deliver_later
+            render @user, status: :created
+          end
         else
           render_errors @user.errors
         end
       end
 
-      def confirm_email
-        @user = User.confirm_email(params[:token])
-        # todo generate another path for frontend
-        if @user.errors.empty?
-          render @user, status: 200
+      def reset_confirm_token
+        token = reset_token(current_user.id, logger)
+        if token.nil?
+          render_errors I18n.t(:redis_error), status: :internal_server_error
         else
+          @user = current_user
+          UsersMailer.welcome_email(@user, token).deliver_later
+          render 'api/v1/users/show', status: :ok
+        end
+      end
+
+      def confirm_email
+        is_error, user_id = find_user_by_token(params[:token], logger).to_a
+
+        if is_error
+          return render_errors I18n.t(:redis_error), status: :internal_server_error
+        else 
+          return render_errors I18n.t(:invalid_token), status: :bad_request if user_id.nil?
+        end
+
+        @user = User.find(user_id)
+        if @user.update(is_confirmed: true)
+          render @user, status: :ok
+        else 
           render_errors @user.errors
-        end  
+        end
       end
 
       def me

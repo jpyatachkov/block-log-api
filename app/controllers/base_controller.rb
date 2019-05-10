@@ -1,5 +1,6 @@
 class BaseController < ProtectedController
   before_action :set_pagination_params
+  before_action :check_user_confimed
 
   protected
 
@@ -18,5 +19,9 @@ class BaseController < ProtectedController
     @order = { created_at: :desc }
     @page = page.zero? ? DEFAULT_PAGE_NUMBER : page
     @size = size.zero? ? DEFAULT_PAGE_SIZE : size
+  end
+
+  def check_user_confimed
+    render_errors I18n.t(:not_confirmed), status: :forbidden unless current_user.is_confirmed
   end
 end
