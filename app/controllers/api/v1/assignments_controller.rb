@@ -84,6 +84,11 @@ module Api
         end
       end
 
+      def set_pagination_params
+        super
+        @order = { created_at: :asc }
+      end
+
       def assignment_params
         params.require(:assignment).permit(
             :title,
