@@ -6,40 +6,19 @@ module Api
       before_action :check_rights_before_create, only: %i[create]
       before_action :check_rights_before_update_destroy, only: %i[update destroy]
 
-      # if i'm owner + helper or is_visible true
       # GET /courses
-      def my_courses(rights)
-        current_user.roles.where(resource_type: :Course, name: rights)
-            .where.not(resource_id: nil)
-            .select(:resource_id)
-            .map(&:resource_id)
-      end
-
-      def get_extended_course(collection)
-        collection
-            .joins('LEFT JOIN course_users on courses.id = course_users.course_id')
-            .where('course_users.user_id = ?', current_user.id)
-            .select('courses.*, course_users.count_passed, course_users.passed')
-        # .joins("LEFT JOIN course_users on courses.id = course_users.course_id and course_users.user_id = #{current_user.id}")
-      end
-
-      # it works
       def index
-        paginate get_extended_course(
-                     Course.where(id: my_courses(%i[moderator collaborator]), is_active: true)
-                         .or(Course.where(is_active: true, is_visible: true))
-                         .distinct
-                 )
+        paginate Course.all_visible_to current_user
       end
 
+      # GET /courses/mine/inactive
       def index_mine_inactive
-        paginate get_extended_course(Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true))
-                     .where('course_users.passed = ?', true), 'api/v1/courses/index'
+        paginate Course.all_belongs_to(current_user, true), 'api/v1/courses/index'
       end
 
+      # GET /courses/mine/active
       def index_mine_active
-        paginate get_extended_course(Course.where(id: my_courses(%i[moderator collaborator user]), is_active: true))
-                     .where('course_users.passed = ?', false), 'api/v1/courses/index'
+        paginate Course.all_belongs_to(current_user, false), 'api/v1/courses/index'
       end
 
       # GET /courses/1

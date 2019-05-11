@@ -16,6 +16,15 @@ class User < ApplicationRecord
     find_by_username request.params.dig 'auth', 'username'
   end
 
+  def all_course_ids_of_with_rights(rights)
+    self
+        .roles
+        .where(resource_type: :Course, name: rights)
+        .where.not(resource_id: nil)
+        .select(:resource_id)
+        .map(&:resource_id)
+  end
+
   def to_token_payload
     main_roles = roles.select(:name)
                       .where(resource_type: :Course)
