@@ -98,6 +98,7 @@ module Api
                                        :description,
                                        :requirements,
                                        :complexity,
+                                       :is_visible,
                                        :avatar_base64
       end
     end
