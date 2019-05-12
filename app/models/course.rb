@@ -17,8 +17,8 @@ class Course < ApplicationRecord
     current_user_courses = current_user.all_course_ids_of_with_rights %i[moderator collaborator]
     self
         .where('course_users.user_id = ?', current_user.id)
-        .or(Course.where(id: current_user_courses, is_active: true))
-        .or(Course.where(is_active: true, is_visible: true))
+        .or(self.where(id: current_user_courses, is_active: true))
+        .or(self.where(is_active: true, is_visible: true))
         .joins('LEFT JOIN course_users on courses.id = course_users.course_id')
         .select('courses.*, course_users.count_passed, course_users.passed')
         .distinct
@@ -55,7 +55,7 @@ class Course < ApplicationRecord
   end
 
   def self.get_course(id)
-    Course.find_by_id(id)
+    self.find_by_id(id)
   end
 
   protected

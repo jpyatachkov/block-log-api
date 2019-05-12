@@ -13,6 +13,21 @@ class Assignment < ApplicationRecord
   after_create :increment_course_assignmetns
   after_create :add_user_assignment_link
 
+  def self.all_from_course_visible_to(course_id, current_user)
+    self
+        .where(course_id: course_id, is_active: true)
+        .where('assignment.is_visible = ? OR assignment_users.user_id = ?', true, current_user.id)
+        .or(Assignment.where course_id: course_id, is_active: true)
+        .joins('LEFT JOIN assignment_users on assignments.id = assignment_users.assignment_id')
+        .select('assignments.*, assignment_users.count_attempts, assignment_users.is_correct')
+        .distinct
+  end
+
+  def self.get_course(id)
+    assignment = self.find_by_id(id)
+    assignment.nil? ? nil : assignment.course
+  end
+
   def destroy
     self.is_active = false
     course.count_assignments -= 1
@@ -24,11 +39,6 @@ class Assignment < ApplicationRecord
     course_users.each do |course_user|
       Solution.check_course_state(course_id, course_user.user)
     end
-  end
-
-  def self.get_course(id)
-    assignment = Assignment.find_by_id(id)
-    assignment.nil? ? nil : assignment.course
   end
 
   protected
