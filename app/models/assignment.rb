@@ -15,12 +15,10 @@ class Assignment < ApplicationRecord
 
   def self.all_from_course_visible_to(course_id, current_user)
     self
-        .where(course_id: course_id, is_active: true)
-        .where('assignment.is_visible = ? OR assignment_users.user_id = ?', true, current_user.id)
-        .or(Assignment.where course_id: course_id, is_active: true)
-        .joins('LEFT JOIN assignment_users on assignments.id = assignment_users.assignment_id')
         .select('assignments.*, assignment_users.count_attempts, assignment_users.is_correct')
-        .distinct
+        .joins(sanitize_sql ['LEFT JOIN assignment_users ON assignments.id = assignment_users.assignment_id AND assignment_users.user_id = ?',
+                            current_user.id])
+        .where(course_id: course_id, is_active: true)
   end
 
   def self.get_course(id)
