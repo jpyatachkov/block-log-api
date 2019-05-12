@@ -16,7 +16,7 @@ class Course < ApplicationRecord
   def self.all_visible_to(current_user)
     current_user_courses = current_user.all_course_ids_of_with_rights %i[moderator collaborator]
     self
-        .where('course_users.user_id = ?', current_user.id)
+        .where('course_users.user_id = ? AND is_active = ?', current_user.id, true)
         .or(self.where(id: current_user_courses, is_active: true))
         .or(self.where(is_active: true, is_visible: true))
         .joins('LEFT JOIN course_users on courses.id = course_users.course_id')
