@@ -65,6 +65,6 @@ class Solution < ApplicationRecord
     end
     assignment_user.save
 
-    check_course_state(course_id, user_id) if is_correct && !already_correct
+    Solution.check_course_state(course_id, user_id) if is_correct && !already_correct
   end
 end
