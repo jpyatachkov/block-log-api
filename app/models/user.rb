@@ -23,6 +23,7 @@ class User < ApplicationRecord
         .where.not(resource_id: nil)
         .select(:resource_id)
         .map(&:resource_id)
+        .uniq
   end
 
   def to_token_payload

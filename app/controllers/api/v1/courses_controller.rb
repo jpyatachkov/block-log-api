@@ -13,12 +13,12 @@ module Api
 
       # GET /courses/mine/inactive
       def index_mine_inactive
-        paginate Course.all_belongs_to(current_user, true), 'api/v1/courses/index'
+        paginate Course.all_belongs_to_and_passed(current_user, true), 'api/v1/courses/index'
       end
 
       # GET /courses/mine/active
       def index_mine_active
-        paginate Course.all_belongs_to(current_user, false), 'api/v1/courses/index'
+        paginate Course.all_belongs_to_and_passed(current_user, false), 'api/v1/courses/index'
       end
 
       # GET /courses/1

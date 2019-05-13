@@ -14,20 +14,18 @@ class Course < ApplicationRecord
                :add_user_course_link
 
   def self.all_visible_to(current_user)
-    current_user_courses = current_user.all_course_ids_of_with_rights %i[moderator collaborator]
+    belongs_to = self.all_belongs_to(current_user)
+    visible = self.all_visible
+
     self
-        .where('course_users.user_id = ? AND is_active = ?', current_user.id, true)
-        .or(self.where(id: current_user_courses, is_active: true))
-        .or(self.where(is_active: true, is_visible: true))
-        .joins('LEFT JOIN course_users on courses.id = course_users.course_id')
+        .from("(#{belongs_to.to_sql} UNION #{visible.to_sql}) AS courses")
+        .joins("LEFT JOIN course_users on courses.id = course_users.course_id AND course_users.user_id = #{current_user.id}")
         .select('courses.*, course_users.count_passed, course_users.passed')
-        .distinct
   end
 
-  def self.all_belongs_to(current_user, passed)
-    current_user_courses = current_user.all_course_ids_of_with_rights %i[moderator collaborator user]
+  def self.all_belongs_to_and_passed(current_user, passed)
     self
-        .where(id: current_user_courses, is_active: true)
+        .all_belongs_to(current_user)
         .joins('LEFT JOIN course_users on courses.id = course_users.course_id')
         .where('course_users.user_id = ?', current_user.id)
         .select('courses.*, course_users.count_passed, course_users.passed')
@@ -59,6 +57,15 @@ class Course < ApplicationRecord
   end
 
   protected
+
+  def self.all_belongs_to(current_user)
+    current_user_courses = current_user.all_course_ids_of_with_rights %i[moderator collaborator user]
+    self.where(id: current_user_courses, is_active: true)
+  end
+
+  def self.all_visible
+    self.where(is_active: true, is_visible: true)
+  end
 
   def set_user_permissions
     user = User.find(user_id)
