@@ -42,6 +42,10 @@ class Solution < ApplicationRecord
     course_user.save
   end
 
+  def user
+    User.find user_id
+  end
+
   protected
 
   def create_or_update_assignment_solution
