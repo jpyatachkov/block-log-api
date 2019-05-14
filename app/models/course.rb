@@ -60,7 +60,7 @@ class Course < ApplicationRecord
 
   def self.all_belongs_to(current_user)
     current_user_courses = current_user.all_course_ids_of_with_rights %i[moderator collaborator user]
-    self.where(id: current_user_courses, is_active: true)
+    self.where(id: current_user_courses, is_active: true, is_visible: true)
   end
 
   def self.all_visible
