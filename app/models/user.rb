@@ -32,7 +32,7 @@ class User < ApplicationRecord
                       .map(&:name)
                       .uniq
                       .reject { |role| role == 'collaborator' }
-    { sub: id, role: main_roles }
+    { sub: id, role: main_roles, is_confirmed: is_confirmed }
   end
 
   protected

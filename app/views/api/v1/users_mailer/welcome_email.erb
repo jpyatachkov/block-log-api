@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Добро пожаловать на blocklog.ru, <%= @user.first_name %></h1>
+    <p> 
+        Для завершения регистрации пройдите по 
+        <a href=<%= url_for(controller: 'api/v1/users', action: 'confirm_email', only_path: false, token: @token) %>>ссылке</a> 
+    </p>
+    <p>
+      Ваш blocklog
+    </p>
+  </body>
+</html>

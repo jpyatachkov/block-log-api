@@ -30,10 +30,31 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options)
   config.active_storage.service = :local
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.active_job.queue_adapter = :sidekiq
 
-  config.action_mailer.perform_caching = false
+  config.active_job.queue_name_prefix = "blocklog"
+  config.active_job.queue_name_delimiter = "_"
+
+  
+  config.action_mailer.default_url_options = { :host => ENV['SITE_URL']  }
+  config.action_mailer.smtp_settings = {
+    adress: ENV['SMTP_ADDRESS'],
+    port: ENV['SMTP_PORT'],
+    domain: ENV['SMTP_DOMAIN'],
+    user_name: ENV['USERNAME'], 
+    password: ENV['PASSWORD'],
+    authentication:       :plain,
+    enable_starttls_auto: true
+  }
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+
+  config.action_mailer.delivery_method = :smtp
+
+  # Don't care if the mailer can't send.
+  # config.action_mailer.raise_delivery_errors = false
+
+  # config.action_mailer.perform_caching = false
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -44,6 +65,7 @@ Rails.application.configure do
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
 
+  # config.action_controller.default_url_options = { host: ENV['SITE_URL'] }
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

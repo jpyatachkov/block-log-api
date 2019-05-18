@@ -25,6 +25,13 @@ services:
     links:
       - api
 
+  
+  redis:
+    image: 'redis:5.0-alpine'
+    command: redis-server --requirepass $REDIS_PASSWORD
+    volumes:
+      - '/data/block-log-api/redis/data/:/data'
+
   api:
     build: .
     restart: always
@@ -32,7 +39,19 @@ services:
       - .env
     links:
       - postgres
+      - redis
+      
     volumes:
       - ./config/master.key:/var/www/block-log-api/config/master.key:ro
       - /data/block-log-api/log/:/var/www/block-log-api/log/
       - /data/block-log-api/public/:/var/www/block-log-api/public/
+
+  sidekiq:
+    links:
+      - 'redis'
+    build: .
+    command: sidekiq --environment production -C config/sidekiq.yml
+    volumes:
+      - '.:/app'
+    env_file:
+      - '.env'

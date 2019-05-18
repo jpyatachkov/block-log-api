@@ -3,6 +3,7 @@ class ApplicationController < ActionController::API
 
   include Knock::Authenticable
   include ErrorHelper
+  include ConfirmTokenHelper
 
   private
 

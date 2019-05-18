@@ -54,12 +54,32 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "block-log-api_#{Rails.env}"
 
-  config.action_mailer.perform_caching = false
+  ###########################################################################
+  # config.action_mailer.perform_caching = false
+  config.active_job.queue_adapter = :sidekiq
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  config.active_job.queue_name_prefix = "blocklog"
+  config.active_job.queue_name_delimiter = "_"
 
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.smtp_settings = {
+    address:              ENV['SMTP_ADDRESS'],
+    port:                 ENV['SMTP_PORT'].to_i,
+    domain:               ENV['SMTP_DOMAIN'],
+    user_name:            ENV['SMTP_USERNAME'],
+    password:             ENV['SMTP_PASSWORD'],
+    authentication:       ENV['SMTP_AUTH'],
+    enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO'] == 'true'
+  }
+
+  config.action_mailer.default_url_options = {
+    host: ENV['ACTION_MAILER_HOST']
+  }
+  config.action_mailer.default_options = {
+    from: ENV['SMTP_USERNAME']
+  }
+  #################################################################################
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
@@ -79,6 +99,10 @@ Rails.application.configure do
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
+
+  # used for url_for in view for email
+  # config.action_controller.default_url_options = { host: ENV['SITE_URL'] }
+
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

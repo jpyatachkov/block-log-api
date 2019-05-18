@@ -1,0 +1,6 @@
+:concurrency: 1
+:queues:
+  - default
+  - mailers
+  - blocklog_default
+  - blocklog_mailers
